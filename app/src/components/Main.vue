@@ -108,7 +108,12 @@
         },
         computed: {
             age() {
-                return '20'
+                const birthday = 989031600000
+
+                const ageDate = new Date(Date.now() - birthday)
+                const age = Math.abs(ageDate.getUTCFullYear() - 1970)
+
+                return age.toString()
             }
         }
     }
