@@ -33,7 +33,7 @@
             <div class="w-full xl:w-256">
                 <div class="md:mx-52 mt-4">
                     <div class="text-gray-600 mb-4 flex items-center flex-col md:flex-row">
-                        <div class="mr-2 mb-2">{{age}} year old tech enthusiast and web developer from germany</div>
+                        <div class="mr-2 mb-2">{{age}} year old tech enthusiast and web developer from Germany</div>
                         <div class="inline-block cursor-pointer text-4xl md:text-2xl md:hover:text-3xl transition-all" @click="secret = true">👋</div>
                     </div>
                     <a class="font-bold hover:text-blue-700 transition-all hover:bg-gray-200 rounded-md py-1 hover:px-3"
@@ -78,14 +78,14 @@
                         advantage of hundreds of free templates.`,
                         website: 'https://xenon.bot',
                         github: 'https://github.com/Xenon-Bot',
-                        image: require('../assets/xenon.png')
+                        image: require('../assets/xenon.jpg')
                     },
                     {
                         name: 'Discord Templates',
                         description: `One of the biggest community driven collection of discord server templates.
                         We had templates before discord even added official support for them.`,
                         website: 'https://templates.xenon.bot',
-                        image: require('../assets/templates.png')
+                        image: require('../assets/templates.jpg')
                     },
                     {
                         name: 'Kite Bot',
@@ -93,14 +93,14 @@
                         Featuring an advanced message builder and block-based script editor.`,
                         website: 'https://kite.bot',
                         github: 'https://github.com/dc-kitebot',
-                        image: require('../assets/kite.png')
+                        image: require('../assets/kite.jpg')
                     },
                     {
                         name: 'discord.club',
                         description: `A tool that allows thousand of users to create custom messages for their discord
                         server. Support for embeds, buttons and attachments.`,
                         website: 'https://discord.club',
-                        image: require('../assets/discord_club.png')
+                        image: require('../assets/discord_club.jpg')
                     },
                 ],
                 secret: false

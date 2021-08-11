@@ -26,7 +26,7 @@
         </div>
         <div class="flex-auto w-full mb-10 md:mb-0 px-5 sm:px-20 md:px-0">
             <a :href="website" target="_blank">
-                <img :src="image" alt=""
+                <img :src="image" :alt="name"
                      class="shadow-lg rounded-lg transform transition-75 transition-transform hover:scale-102 w-full">
             </a>
         </div>
