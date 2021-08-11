@@ -2,7 +2,7 @@ module.exports = {
     devServer: {
         proxy: {
             '^/api': {
-                target: 'https://dev.merlin.gg',
+                target: 'https://merlin.gg',
                 changeOrigin: true
             }
         }

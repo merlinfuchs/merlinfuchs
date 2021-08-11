@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center flex-col-reverse" :class="{'md:flex-row': !reverse, 'md:flex-row-reverse': reverse}">
-        <div class="flex-auto w-full" :class="{'pr-28 pl-5': !reverse, 'pl-28 pr-5': reverse}">
+        <div class="flex-auto w-full" :class="{'md:pr-28 md:pl-5': !reverse, 'md:pl-28 md:pr-5': reverse}">
             <div class="text-6xl mb-6">{{name}}</div>
             <div class="text-gray-500 mb-10">{{description}}</div>
             <div class="flex font-bold text-xl">

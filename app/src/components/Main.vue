@@ -7,7 +7,7 @@
                 </div>
                 <div class="flex-auto text-5xl mb-1 text-black">Merlin Fuchs</div>
                 <div class="flex-initial">
-                    <div class="bg-gray-100 rounded-t-md pt-2 pb-1 px-4 flex text-xl">
+                    <div class="md:bg-gray-100 rounded-t-md pt-2 pb-1 px-4 flex text-xl">
                         <a href="https://linkedin.com/in/merlin-fuchs-6a8aa016a/" class="mr-4 hover:text-blue-700"
                            target="_blank">
                             <font-awesome-icon :icon="['fab', 'linkedin']"/>
@@ -29,12 +29,12 @@
                 </div>
             </div>
         </div>
-        <div class="grid justify-items-center px-5 mb-36">
+        <div class="grid justify-items-center px-5 mb-20 md:mb-36 mt-36 md:mt-0 text-center md:text-left overflow-hidden">
             <div class="w-full xl:w-256">
-                <div class="md:ml-52 mt-4 w-128">
-                    <div class="text-gray-600 mb-4 flex items-center">
-                        <div class="mr-2">{{age}} year old tech enthusiast and web developer from germany</div>
-                        <div class="inline-block cursor-pointer text-2xl hover:text-3xl transition-all" @click="secret = true">👋</div>
+                <div class="md:mx-52 mt-4">
+                    <div class="text-gray-600 mb-4 flex items-center flex-col md:flex-row">
+                        <div class="mr-2 mb-2">{{age}} year old tech enthusiast and web developer from germany</div>
+                        <div class="inline-block cursor-pointer text-4xl md:text-2xl md:hover:text-3xl transition-all" @click="secret = true">👋</div>
                     </div>
                     <a class="font-bold hover:text-blue-700 transition-all hover:bg-gray-200 rounded-md py-1 hover:px-3"
                        href="mailto:hi@merlin.gg">
