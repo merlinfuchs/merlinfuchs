@@ -30,18 +30,26 @@ module.exports = {
                 '368': '92rem'
             },
             margin: {
+                '-68': '-17rem',
                 '112': '28rem',
                 '128': '32rem'
             },
             borderWidth: {
                 '1': '1px'
+            },
+            scale: {
+                '102': '1.02'
             }
         },
     },
     variants: {
         extend: {
-            margin: ['hover'],
-            borderRadius: ['hover']
+            margin: ['hover', 'group-hover'],
+            padding: ['hover'],
+            borderRadius: ['hover'],
+            width: ['group-hover'],
+            display: ['group-hover'],
+            fontSize: ['hover']
         },
     },
     plugins: [],

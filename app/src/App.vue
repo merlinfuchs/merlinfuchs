@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="bg-gray-100 h-screen overflow-auto">
+  <div id="app" class="bg-gray-100 h-screen w-screen overflow-auto">
     <Main/>
   </div>
 </template>
