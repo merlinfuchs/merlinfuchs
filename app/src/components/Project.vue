@@ -4,18 +4,18 @@
             <div class="text-6xl mb-6">{{name}}</div>
             <div class="text-gray-500 mb-10">{{description}}</div>
             <div class="flex font-bold text-xl">
-                <a :href="website" target="_blank" class="relative group mr-10" v-if="website">
-                    <div class="absolute left-0 bg-gray-300 h-full w-0 group-hover:w-full transition-all rounded-md"></div>
-                    <div class="relative z-10 my-3 group-hover:mx-5 flex items-center transition-all">
+                <a :href="website" target="_blank" class="relative group mr-5 md:mr-10" v-if="website">
+                    <div class="absolute left-0 bg-gray-300 h-full w-full md:w-0 group-hover:w-full transition-all rounded-md"></div>
+                    <div class="relative z-10 my-3 mx-5 md:mx-0 group-hover:mx-5 flex items-center transition-all">
                         <div class="mr-3">Website</div>
-                        <font-awesome-icon :icon="['far', 'square']" class="block group-hover:hidden"/>
+                        <font-awesome-icon :icon="['far', 'square']" class="md:block hidden group-hover:hidden"/>
                         <font-awesome-icon :icon="['fas', 'external-link-alt']"
-                                           class="hidden group-hover:block"/>
+                                           class="block md:hidden group-hover:block"/>
                     </div>
                 </a>
                 <a :href="github" target="_blank" class="relative group" v-if="github">
-                    <div class="absolute left-0 bg-gray-300 h-full w-0 group-hover:w-full transition-all rounded-md"></div>
-                    <div class="relative z-10 my-3 group-hover:mx-5 flex items-center transition-all">
+                    <div class="absolute left-0 bg-gray-300 h-full w-full md:w-0 group-hover:w-full transition-all rounded-md"></div>
+                    <div class="relative z-10 my-3 mx-5 md:mx-0 group-hover:mx-5 flex items-center transition-all">
                         <div class="mr-3">Github</div>
                         <font-awesome-icon :icon="['fab', 'github']" class="block group-hover:hidden"/>
                         <font-awesome-icon :icon="['fas', 'external-link-alt']"
