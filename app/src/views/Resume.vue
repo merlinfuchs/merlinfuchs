@@ -107,21 +107,22 @@
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">React</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Linux</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Git</div>
-                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Nginx</div>
+                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">MongoDB</div>
+                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Redis</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">REST APIs</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Docker</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Kubernetes</div>
                             </div>
                         </div>
 
-                        <div class="mb-10">
+                        <!-- <div class="mb-10">
                             <h3 class="text-2xl mb-3">Interests</h3>
                             <div class="flex flex-wrap items-center text-sm font-bold px-1">
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Computer Science</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Psychology</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Philosophy</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="flex-auto lg:w-8/12 pt-10 px-5 lg:pl-16 text-lg">
@@ -236,7 +237,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="mb-8">
                             <div class="font-bold flex items-center mb-3">
                                 <div class="text-xl mr-2">discord.club</div>
                                 <a href="https://discord.club" target="_blank">
