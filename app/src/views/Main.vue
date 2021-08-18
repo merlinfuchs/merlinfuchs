@@ -62,7 +62,7 @@
             <Secret @close="secret = false"/>
         </div>
 
-        <router-link class="fixed z-90 bottom-5 right-5 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-200 flex items-center justify-center" to="/resume">
+        <router-link class="fixed z-50 bottom-5 right-5 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-200 flex items-center justify-center" to="/resume">
             <font-awesome-icon :icon="['fas', 'archive']" class="text-xl"/>
         </router-link>
     </div>
