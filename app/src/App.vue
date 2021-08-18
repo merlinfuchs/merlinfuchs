@@ -1,17 +1,12 @@
 <template>
-  <div id="app" class="bg-gray-100 h-screen w-screen overflow-auto">
-    <Main/>
+  <div id="app">
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Main from "./components/Main";
-
 export default {
   name: 'App',
-  components: {
-    Main
-  }
 }
 </script>
 

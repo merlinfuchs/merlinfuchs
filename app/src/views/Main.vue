@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-gray-100 h-screen w-screen overflow-y-auto overflow-x-hidden">
         <div class="bg-blue-400 grid justify-items-center px-5 pt-10 svg-header">
             <div class="relative h-48 w-full xl:w-256 flex flex-col md:flex-row items-center md:items-end">
                 <div class="flex-grow-0 flex-shrink-0 md:mr-4 py-5 md:py-0">
@@ -8,7 +8,7 @@
                 <div class="flex-auto text-5xl mb-1 text-black">Merlin Fuchs</div>
                 <div class="flex-initial">
                     <div class="md:bg-gray-100 rounded-t-md pt-2 pb-1 px-4 flex text-xl">
-                        <a href="https://linkedin.com/in/merlin-fuchs-6a8aa016a/" class="mr-4 hover:text-blue-700"
+                        <a href="https://linkedin.com/in/merlin-fuchs/" class="mr-4 hover:text-blue-700"
                            target="_blank">
                             <font-awesome-icon :icon="['fab', 'linkedin']"/>
                         </a>
@@ -34,7 +34,9 @@
                 <div class="md:mx-52 mt-4">
                     <div class="text-gray-600 mb-4 flex items-center flex-col md:flex-row">
                         <div class="mr-2 mb-2">{{age}} year old tech enthusiast and web developer from Germany</div>
-                        <div class="inline-block cursor-pointer text-4xl md:text-2xl md:hover:text-3xl transition-all" @click="secret = true">👋</div>
+                        <div class="inline-block cursor-pointer text-4xl md:text-2xl md:hover:text-3xl transition-all"
+                             @click="secret = true">👋
+                        </div>
                     </div>
                     <a class="font-bold hover:text-blue-700 transition-all hover:bg-gray-200 rounded-md py-1 hover:px-3"
                        href="mailto:hi@merlin.gg">
@@ -45,26 +47,30 @@
         </div>
 
         <div v-for="(project, i) in projects" :key="i" class="mb-48">
-            <div class="grid justify-items-center px-5">
+            <div class="grid justify-items-center px-5 z-10 relative">
                 <div class="w-full xl:w-256">
                     <Project v-bind="project" :reverse="Boolean(i % 2)"/>
                 </div>
             </div>
-            <div class="h-64 bg-gray-200 -mt-72" :class="{
-                'lg:rounded-r-md lg:mr-48': !(i % 2),
-                'lg:rounded-l-md lg:ml-48': i % 2
-            }"></div>
+            <div class="h-64 bg-gray-200 -mt-72 transform" :class="{
+                    'lg:rounded-r-md lg:mr-48 md:rotate-1': !(i % 2),
+                    'lg:rounded-l-md lg:ml-48 md:-rotate-1': i % 2
+                }"></div>
         </div>
 
         <div v-if="secret">
             <Secret @close="secret = false"/>
         </div>
+
+        <router-link class="fixed z-90 bottom-5 right-5 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-200 flex items-center justify-center" to="/resume">
+            <font-awesome-icon :icon="['fas', 'archive']" class="text-xl"/>
+        </router-link>
     </div>
 </template>
 
 <script>
-    import Project from "./Project";
-    import Secret from "./Secret";
+    import Project from "@/components/Project";
+    import Secret from "@/components/Secret";
 
     export default {
         components: {Project, Secret},
