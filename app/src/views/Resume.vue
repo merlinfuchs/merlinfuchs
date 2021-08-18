@@ -8,7 +8,7 @@
                         <h1 class="text-4xl font-bold mb-3">Merlin Fuchs</h1>
                         <div>
                             Motivated and independent software developer with significant experience in web development
-                            and deploying applications.
+                            and deploying applications. Likes to build cool stuff and learn new things.
                         </div>
 
                         <div class="flex flex-wrap mt-10 mb-20 justify-center">
