@@ -1,0 +1,7 @@
+name = "merlin-gg-api"
+type = "webpack"
+
+account_id = "42459c568b12d0902eeac887235b0c41"
+workers_dev = false
+route = "*merlin.gg/api*"
+zone_id = "991ddf6a0978449e88cdd50c04d65bc0"

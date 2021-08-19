@@ -1,0 +1,9 @@
+{
+    "name": "merlin-gg-api",
+    "private": true,
+    "version": "0.1.0",
+    "main": "index.js",
+    "dependencies": {
+        "itty-router": "^2.1.9"
+    }
+}
