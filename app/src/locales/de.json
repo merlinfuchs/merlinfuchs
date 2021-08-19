@@ -1,0 +1,69 @@
+{
+  "resume": {
+    "profile": "Motivierter und unabhängiger Softwareentwickler mit Erfahrung im Bereich der Webentwicklung und Systemadministration. Mag es Ideen umzusetzen und neues zu lernen.",
+    "skills": {
+      "title": "Technische Skills"
+    },
+    "experience": {
+      "title": "Berufserfahrung",
+      "independent": {
+        "name": "Einzelunternehmen",
+        "period": "2018 - Heute",
+        "1": "Webentwicklung und Systemadministration selber beigebracht",
+        "2": "Mehrere Projekte umgesetzt und längerfristig verwaltet",
+        "3": "Ein kleines Unternehmen aufgebaut"
+      }
+    },
+    "education": {
+      "title": "Bildung",
+      "szut": {
+        "period": "2017 - Juli 2021",
+        "abitur": {
+          "name": "Abitur",
+          "compare": "",
+          "description": "Mit Fokus auf Informationstechnik und Mathematik"
+        },
+        "apprenticeship": {
+          "name": "Ausbildung",
+          "compare": "(Informationstechnischer Assistent)",
+          "description": "Mit Fokus auf Informationstechnik und Informatik",
+          "1": "Grumdlegender Aufbau von Computern und Logikgatter",
+          "2": "Netzwerktechnik",
+          "3": "CCNA Routing and Switching (1-4)",
+          "4": "Softwareentwicklung"
+        }
+      }
+    },
+    "projects": {
+      "title": "Projekte",
+      "xenon": {
+        "description": "Einer der größten Discord Bots der Welt mit über einer Millionen Nutzern"
+      },
+      "templates": {
+        "description": "Eine der größten Listen von öffentlichen Discord Server Templates"
+      },
+      "kite": {
+        "description": "A no-code platform for discord bots that allows its users to create their own bots"
+      },
+      "discord_club": {
+        "description": "Ein Tool, welches es tausenden von monatlichen Nutzern ermöglicht, angepasste Nachrichten für ihren Discord Server zu erstellen"
+      }
+    }
+  },
+  "languages": {
+    "title": "Sprachen",
+
+    "en": "Englisch",
+    "de": "Deutsch",
+    "es": "Spanisch",
+
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "native": "Muttersprache"
+    }
+  },
+  "countries": {
+    "germany": "Deutschland"
+  }
+}

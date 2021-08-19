@@ -1,0 +1,69 @@
+{
+  "resume": {
+    "profile": "Motivated and independent software developer with significant experience in web development and deploying applications. Likes to build cool stuff and learn new things.",
+    "skills": {
+      "title": "Technical Skills"
+    },
+    "experience": {
+      "title": "Work Experience",
+      "independent": {
+        "name": "Independent Business",
+        "period": "2018 - Present",
+        "1": "Taught myself web development and system administration",
+        "2": "Created and maintained multiple projects",
+        "3": "Built a small business"
+      }
+    },
+    "education": {
+      "title": "Education",
+      "szut": {
+        "period": "2017 - July 2021",
+        "abitur": {
+          "name": "Abitur",
+          "compare": "(Comparable to AP exams)",
+          "description": "Focused on informational technology and mathematics"
+        },
+        "apprenticeship": {
+          "name": "Apprenticeship",
+          "compare": "(Comparable to an associate degree)",
+          "description": "Focused on informational technology and computer science",
+          "1": "Basic computer components and logic gates",
+          "2": "Networking",
+          "3": "CCNA Routing and Switching (1-4)",
+          "4": "Software Development"
+        }
+      }
+    },
+    "projects": {
+      "title": "Projects",
+      "xenon": {
+        "description": "One of the biggest discord bots in the world with over one million users"
+      },
+      "templates": {
+        "description": "One of the biggest community driven collection of discord server templates"
+      },
+      "kite": {
+        "description": "A no-code platform for discord bots that allows its users to create their own bots"
+      },
+      "discord_club": {
+        "description": "A tool that allows thousands of users to create custom messages for their discord server"
+      }
+    }
+  },
+  "languages": {
+    "title": "Languages",
+
+    "en": "English",
+    "de": "German",
+    "es": "Spanish",
+
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "native": "Native"
+    }
+  },
+  "countries": {
+    "germany": "Germany"
+  }
+}

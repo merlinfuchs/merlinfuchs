@@ -9,6 +9,7 @@ import {faSquare} from "@fortawesome/free-regular-svg-icons";
 import {faDiscord, faTwitter, faInstagram, faLinkedin, faGithub} from "@fortawesome/free-brands-svg-icons";
 import VueRouter from 'vue-router'
 import router from "./router";
+import i18n from './i18n'
 
 library.add(faDiscord)
 library.add(faTwitter)
@@ -31,5 +32,6 @@ Vue.use(VueRouter)
 
 new Vue({
     render: h => h(App),
+    i18n,
     router
 }).$mount('#app')
