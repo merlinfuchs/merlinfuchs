@@ -94,6 +94,7 @@
                             <div class="flex flex-wrap items-center text-sm font-bold px-1">
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Python</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">JavaScript</div>
+                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">TypeScript</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Rust</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Golang</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">HTML5</div>
@@ -102,9 +103,11 @@
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">VueJS</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">NuxtJS</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">React</div>
+                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">NextJS</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Linux</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Git</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">MongoDB</div>
+                                <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">PostgreSQL</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Redis</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">REST APIs</div>
                                 <div class="px-2 py-1 rounded-md bg-blue-300 mr-2 mb-2">Docker</div>
@@ -185,6 +188,7 @@
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">Python</div>
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">Rust</div>
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">gRPC</div>
+                                    <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">NextJS</div>
                                 </div>
                             </div>
                         </div>
@@ -222,8 +226,9 @@
                                 <div class="flex flex-wrap mt-2 text-sm font-bold">
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">VueJS</div>
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">Tailwind</div>
-                                    <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">Python</div>
+                                    <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">TypeScript</div>
                                     <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">Rust</div>
+                                    <div class="px-2 py-1 bg-gray-200 rounded-md mr-2">ExpressJS</div>
                                 </div>
                             </div>
                         </div>
