@@ -153,6 +153,20 @@
                         <h3 class="text-3xl mb-4">{{$t('resume.education.title')}}</h3>
                         <div class="mb-6">
                             <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
+                                <div class="text-xl mr-2">{{$t('resume.education.uni.title')}}</div>
+                                <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
+                                    {{$t('resume.education.uni.period')}}
+                                </div>
+                            </div>
+                            <div class="mb-3 ml-3">
+                                <div>
+                                    <span class="font-bold">{{$t('resume.education.uni.sociology.name')}}</span>
+                                </div>
+                                <div class="text-gray-700">{{$t('resume.education.uni.sociology.description')}}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
                                 <div class="text-xl mr-2">Schulzentrum SII Utbremen</div>
                                 <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
                                     {{$t('resume.education.szut.period')}}
@@ -179,20 +193,6 @@
                                         <li>{{$t('resume.education.szut.apprenticeship.4')}}</li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
-                                <div class="text-xl mr-2">{{$t('resume.education.uni.title')}}</div>
-                                <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
-                                    {{$t('resume.education.uni.period')}}
-                                </div>
-                            </div>
-                            <div class="mb-3 ml-3">
-                                <div>
-                                    <span class="font-bold">{{$t('resume.education.uni.sociology.name')}}</span>
-                                </div>
-                                <div class="text-gray-700">{{$t('resume.education.uni.sociology.description')}}</div>
                             </div>
                         </div>
                     </div>
