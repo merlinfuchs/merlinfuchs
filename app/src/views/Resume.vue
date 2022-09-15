@@ -62,11 +62,11 @@
                                         <div class="w-3 h-3 bg-gray-800 rounded-sm mx-1"></div>
                                         <div class="w-3 h-3 bg-gray-800 rounded-sm mx-1"></div>
                                         <div class="w-3 h-3 bg-gray-800 rounded-sm mx-1"></div>
-                                        <div class="w-3 h-3 bg-blue-300 rounded-sm mx-1"></div>
+                                        <div class="w-3 h-3 bg-gray-800 rounded-sm mx-1"></div>
                                         <div class="w-3 h-3 bg-blue-300 rounded-sm mx-1"></div>
 
                                         <div class="absolute text-sm hidden group-hover:block left-28 bg-gray-300 px-2 py-2 rounded-md">
-                                            {{$t('languages.levels.intermediate')}}
+                                            {{$t('languages.levels.advanced')}}
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                 <div class="flex-auto lg:w-8/12 pt-10 px-5 lg:pl-16 text-lg">
                     <div class="mb-8">
                         <h3 class="text-3xl mb-4">{{$t('resume.experience.title')}}</h3>
-                        <div>
+                        <div class="mb-6">
                             <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
                                 <div class="text-xl mr-2">{{$t('resume.experience.independent.name')}}</div>
                                 <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
@@ -134,10 +134,24 @@
                                 </ul>
                             </div>
                         </div>
+                        <div>
+                            <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
+                                <div class="text-xl mr-2">{{$t('resume.experience.fc.name')}}</div>
+                                <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
+                                    {{$t('resume.experience.fc.period')}}
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <ul class="list-inside list-disc">
+                                    <li>{{$t('resume.experience.fc.1')}}</li>
+                                    <li>{{$t('resume.experience.fc.2')}}</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-8">
                         <h3 class="text-3xl mb-4">{{$t('resume.education.title')}}</h3>
-                        <div>
+                        <div class="mb-6">
                             <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
                                 <div class="text-xl mr-2">Schulzentrum SII Utbremen</div>
                                 <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
@@ -165,6 +179,20 @@
                                         <li>{{$t('resume.education.szut.apprenticeship.4')}}</li>
                                     </ul>
                                 </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold flex flex-col sm:flex-row sm:items-center mb-3">
+                                <div class="text-xl mr-2">{{$t('resume.education.uni.title')}}</div>
+                                <div class="px-2 py-1 bg-gray-200 rounded-md text-sm text-center mt-1 sm:mt-0">
+                                    {{$t('resume.education.uni.period')}}
+                                </div>
+                            </div>
+                            <div class="mb-3 ml-3">
+                                <div>
+                                    <span class="font-bold">{{$t('resume.education.uni.sociology.name')}}</span>
+                                </div>
+                                <div class="text-gray-700">{{$t('resume.education.uni.sociology.description')}}</div>
                             </div>
                         </div>
                     </div>
@@ -232,7 +260,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="pb-16">
+                        <div class="mb-8">
                             <div class="font-bold flex items-center mb-3">
                                 <div class="text-xl mr-2">discord.club</div>
                                 <a href="https://discord.club" target="_blank">

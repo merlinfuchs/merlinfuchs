@@ -12,6 +12,12 @@
         "1": "Taught myself web development and system administration",
         "2": "Created and maintained multiple projects",
         "3": "Built a small business"
+      },
+      "fc": {
+        "name": "Friendly Captcha",
+        "period": "2021 - Present",
+        "1": "Fullstack Software Engineer",
+        "2": "Content Writer"
       }
     },
     "education": {
@@ -31,6 +37,14 @@
           "2": "Networking",
           "3": "CCNA Routing and Switching (1-4)",
           "4": "Software Development"
+        }
+      },
+      "uni": {
+        "title": "Leipzig University",
+        "period": "October 2022 - Present",
+        "sociology": {
+          "name": "Bachelor of Arts",
+          "description": "Sociology"
         }
       }
     },
@@ -60,6 +74,7 @@
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
+      "advanced": "Advanced",
       "native": "Native"
     }
   },

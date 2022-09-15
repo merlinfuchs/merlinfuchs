@@ -12,6 +12,12 @@
         "1": "Webentwicklung und Systemadministration selber beigebracht",
         "2": "Mehrere Projekte umgesetzt und längerfristig verwaltet",
         "3": "Ein kleines Unternehmen aufgebaut"
+      },
+      "fc": {
+        "name": "Friendly Captcha",
+        "period": "2021 - Heute",
+        "1": "Fullstack Software Engineer",
+        "2": "Blog Author"
       }
     },
     "education": {
@@ -31,6 +37,14 @@
           "2": "Netzwerktechnik",
           "3": "CCNA Routing and Switching (1-4)",
           "4": "Softwareentwicklung"
+        }
+      },
+      "uni": {
+        "title": "Universität Leipzig",
+        "period": "Oktober 2022 - Heute",
+        "sociology": {
+          "name": "Bachelor of Arts",
+          "description": "Soziologie"
         }
       }
     },
@@ -60,6 +74,7 @@
     "levels": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
+      "advanced": "Kompetent",
       "native": "Muttersprache"
     }
   },

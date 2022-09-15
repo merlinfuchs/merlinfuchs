@@ -155,6 +155,12 @@ export default {
           website: 'https://discord.club',
           image: require('../assets/discord_club.jpg')
         },
+        {
+          name: 'Friendly Captcha',
+          description: `I'm working as a freelancer for Friendly Captcha. It protects your websites from spam and abuse. It is easy to use and respects your user's privacy.`,
+          website: 'https://friendlycaptcha.com/',
+          image: require('../assets/friendly_captcha.png')
+        },
       ],
       secret: false
     }
