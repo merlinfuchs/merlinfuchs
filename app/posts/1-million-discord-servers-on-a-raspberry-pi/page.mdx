@@ -1,0 +1,54 @@
+# 1 Million Discord Servers on a Raspberry Pi
+
+_How I'm running one of the biggest Discord bots in the world on 2GB of RAM and one CPU core._
+
+<PostDate date="2021-08-16" />
+
+![Raspberry Pi](/raspberrypi.webp)
+
+## But How?
+
+So you might be asking yourself now: How does this even work? It's actually relatively simple and straight forward.
+
+Xenon, at its core, is a pretty simple bot. It doesn't need frequent access to information like channels, roles, or members and also doesn't need to know when someone sends a message or adds a reaction. All we want to receive from Discord are the commands that you, the user, use to interact with Xenon. This makes Xenon perfect for the use of [Slash Commands](https://blog.discord.com/slash-commands-are-here-8db0a385d9e6) and [Interactions](https://support.discord.com/hc/en-us/articles/1500012250861-Bots-Buttons).
+
+Below I will try to explain in detail how Slash Commands are helping us and how we are avoiding to cache things like guilds, channels and roles.
+
+## Slash Commands
+
+![Slash Commands](/slashcommands.webp)
+
+We recently switched to Slash Commands and shut down our old command handler that was based on normal messages starting with a prefix.  
+Slash Commands have one major advantage for us: We don't have to process thousands of message events just to receive a few commands. With Slash Commands we only receive the commands and don't have to worry about discarding all the other events. The switch to Slash Commands alone reduced the CPU usage of Xenon by around 70%.
+
+You can see a visualization of the difference below. Keep in mind that the graph is scaled logarithmically.
+
+![Xenon Events per Second](/xenon-events.webp)
+
+Events per seconds (log2 scale) — No Slash Commands vs. With Slash Commands
+
+Slash Commands have another nice side effect: You can instruct Discord to send them to you over an HTTPS-Endpoint instead of sending it over a static websocket connection.
+
+To receive events from Discord you usually need to open one static connection for every thousand servers. This process is called [_sharding_](https://discord.com/developers/docs/topics/gateway#sharding). At one million servers, and therefore around one thousand static connections, it can actually get challenging to keep all those statics connections up and running.
+
+With Slash Commands you don't have this issue. You don't need single a static connection to receive them and can therefore save a lot of resources. **Slash Commands are the reason why we can easily run Xenon on a single CPU core.**
+
+Read more about our decision to switch to Slash Commands [here](https://medium.com/xenonbot/slash-commands-are-here-7b27c6f0dc80)!
+
+## Fetching, not Caching
+
+To reduce RAM usage we are following one simple principle: Everything that can be fetched is not kept in cache.
+
+Most discord bots keep a lot of information in their internal cache. Things like servers, channels, roles, and even members are commonly kept in memory to avoid fetching them. For small bots this isn't an issue but for larger bots it can add up and use a lot of resources. If Xenon would still cache all servers, channels, roles, and members it would most likely use 100GB+ RAM.
+
+Xenon doesn't need frequent access to these information can therefore avoid caching them. When we actually need information about a server, channel, role, or member we just fetch it from the Discord API. Xenon is therefore almost entirely stateless with a few small exceptions.
+
+**This is the reason why Xenon uses less than 2GB of RAM.**
+
+## Conclusion
+
+We are pretty lucky that we can live without caching any information and don't need to receive any events. Most discord bots would probably not work without a static connection to discord, but it's definitely worth putting some thought into what you are keeping in cache.
+
+Slash Commands are far from being perfect but they also have a lot of advantages over message based commands. A few weeks ago [Discord has announced that all bots will have to switch to Slash Commands until April of 2022](https://support-dev.discord.com/hc/en-us/articles/4404772028055). It's a good feeling that we don't have to worry about this anymore.
+
+It's a cool thought that we could run Xenon on a single Raspberry Pi, but it's not a good idea in practice. The network connection, stability and safety of hosted servers can't be replaced by a single micro controller.

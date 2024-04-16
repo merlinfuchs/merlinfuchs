@@ -1,0 +1,144 @@
+<title>Handling Discord Rate Limits at Scale</title>
+
+# Handling Discord Rate Limits at Scale
+
+_How [Xenon](https://xenon.bot) handles Discord rate limits at scale and how we are avoiding to get banned by Cloudflare_
+
+<PostDate date="2021-10-03" />
+
+![Cloudflare Ban](/cloudflare-ban.webp)
+
+## Rate Limits?
+
+As you might know the Discords API, like many other APIs, has rate limits to protect it from abuse and spam. For the Discord HTTP API those rate limits come in three different forms: Per-Route, Global and the Invalid-Request-Limit.
+
+### Per-Route
+
+Many endpoints of the Discord API have an per-route rate limit. For example the `GET /users/<user_id>` endpoint has a per-route rate limit of 30 requests per 30 seconds (1 request per second).
+
+These rate limits can change at any point and are in most cases communicated by discord through response headers like this:
+
+```yaml
+x-ratelimit-limit: 30
+x-ratelinit-remaining: 29
+x-ratelimit-reset-after: 30
+```
+
+This means that we can handle them easily in our request client and avoid hitting the rate limit. Some per-route rate limits are not communicated through response headers (don't ask me why) and can not be handled in advance. When you hit such a limit Discord will send you a response with a `429` status code and a JSON body containing a `retry_after` field. This field indicates when you will be able to use the endpoint again.
+
+### Global
+
+The global rate limit is shared across all endpoints that require authentication and allows 50 requests per seconds by default. Endpoints that don't require authentication only count into your bots global rate limit if you set the `Authorization` header on them. Otherwise they will have a separate global rate limit of 50 requests per second which is linked to your IP address.
+
+Big bots that are in more 250,000 servers can get an increased rate limit which will bump them to 500 requests per second (or more). It's important to understand that the rate limit increase only affects requests that are made with the `Authorization` header set.
+
+This means in practice that it can make sense for bots to make requests to endpoints that don't require authentication (like webhooks) without the `Authorization` header set. This will give you two separate global rate limits. You can even load balance the requests across multiple IP addresses to have even more separate rate limits. This only works for endpoints that don't require authentication tho.
+
+### Invalid-Request-Limit
+
+In addition to the per-route and global rate limit Discord also enforces another rate limit across all endpoints. This rate limit is enforced through Cloudflare and is linked to your IP address. If you make more than 10,000 requests in 10 minutes that result in a status code of 401, 403 or 429 you will be banned from using the API for at least one hour.
+
+This rate limit should be avoided at all costs because it can literally take down your bot for multiple hours.
+
+## How do we handle Rate Limits at Xenon?
+
+There are different ways to handle rate limits and it depends on how your bot works what is the best for your bot. If you are just running a small bot using libraries like discord.py or discord.js you will never have to think about rate limits at all. These libraries handle all the rate limit work in the background.
+
+When your bot grows you might feel the need to split your bot into multiple processes. This is where it can get complicated. Depending on how these processes work together you might need to synchronize per-route rate limits and you most likely also need to synchronize the global rate limit across all processes.
+
+### Synchronization between Processes
+
+Synchronizing rate limits between processes can be done in many different ways. One way is to use a shared key-value database like Redis to accomplish this. That is exactly what we are doing at Xenon and this is how it looks in practice:
+
+**Before the request**
+
+```markdown
+- Client checks if redis contains the key that indicates that the global rate limit was hit
+- Client waits for the time to live of that key to be over if that key exists- Client creates a key that uniquely identifies the request route
+- Client checks the time to live for the request key in Redis (PTTL)
+- Client checks the remaining value for the request key in Redis (GET)
+- Client waits for the time to live to be over if the remaining value is 0
+```
+
+**After the request if the response code is 2XX**
+
+```markdown
+- Client gets the rate limit information from the response headers
+- Client puts the remaining value into redis with a time to live that equals to the x-ratelimit-reset-after header (SETEX)
+```
+
+**After the request if the response code is 429**
+
+```markdown
+- Client checks if the global rate limit was head
+- If Global: Client sets a key in redis that indicates that the global rate limit was hit with a time to live that equals to the retry_after value in the responses body (SETEX)
+- If Per-Route: Client sets the remaining value for the request route in redis to 0 with a time to live that equals to retry_after value in the response body (SETEX)
+```
+
+By storing all the rate limit values in a shared key-value storage all processes know about all rate limits at any time. This means that process A knows when process B hit a rate limit on endpoint X and therefore can't make another request to endpoint X until the rate limit is over.
+
+Another advantage of storing all rate limit values in a shared key-value storage is that rate limits that last a long time (there are a few that last multiple hours and even days) are tracked and persisted even if a process is restarted.
+
+### Global Request Proxy
+
+In addition to synchronizing rate limits across processes we have recently introduced another system to avoid hitting rate limits. All requests from all processes go through a central request proxy that handles the global rate limit and enforces some additional rules. This is most likely not necessary for most bots but can be helpful if you are making a lot of requests and the synchronization between the processes can't keep up. Keep in mind that this adds a single point of failure which might not be suitable for some bots.
+
+There are a few pretty powerful pre-built request proxies for Discord like [Twilight HTTP-Proxy](https://github.com/twilight-rs/http-proxy) which can handle per-route rate limits and the global rate limit for you. Using such a proxy can allow you to get rid of synchronizing rate limits across processes because all rate limits are handled by the proxy.
+
+We have chosen a different and more light weight approach. Instead of a proxy that is specifically designed for the Discord API we are using the reverse-proxy feature of Nginx. Nginx allows us to proxy requests to Discord and enforce the global rate limit. A simple Nginx config for a Discord API proxy can look like this:
+
+```nginx
+limit_req_zone $proxy_host zone=global:1m rate=50r/s;
+
+log_format discord_logs '$remote_addr [$time_local] $upstream_http_cf_ray $upstream_http_cf_request_id $upstream_cache_status $status "$request" $body_bytes_sent';
+
+server {
+    location / {
+        limit_req zone=global burst=2000;
+        limit_req_status 597; proxy_set_header Authorization "Bot your-token";
+        proxy_pass [https://discord.com](https://discord.com);
+        proxy_read_timeout 90; client_max_body_size 8M; access_log /var/log/nginx/discord_proxy.log discord_logs;
+    } listen 10.0.0.6:8080;
+}
+```
+
+This enforces the global rate limit using `limit_req_zone` , limits the max body size to 8MB and logs all requests into a file. When the global rate limit of 50 requests per second is reached the proxy will queue up up to 2000 requests and then respond with a `592` status code to all additional requests.
+
+This works great and makes sure that the global rate limit is never surpassed but we have added some additional rules to do a bit more:
+
+```nginx
+limit_req_zone $proxy_host zone=auth_global:1m rate=50r/s;
+
+limit_req_zone $proxy_host zone=unauth_global:1m rate=50r/s;
+log_format discord_logs '$remote_addr [$time_local] $upstream_http_cf_ray $upstream_http_cf_request_id $upstream_cache_status $status "$request" $body_bytes_sent';
+proxy_cache_path /etc/nginx/cache levels=1:2 keys_zone=entities:10m inactive=60m max_size=5g use_temp_path=off;
+
+server {
+    location / {
+        limit_req zone=auth_global burst=2000;
+        limit_req_status 597; proxy_cache entities;
+        proxy_cache_key $request_method$request_uri;
+        proxy_cache_methods GET HEAD POST; # PUT DELETE PATCH
+        proxy_ignore_headers Cache-Control Expires Set-Cookie X-Accel-Expires Vary;
+        proxy_cache_valid 404 30s;
+        proxy_cache_valid 401 5s; proxy_set_header Authorization "Bot your-token";
+        proxy_read_timeout 90; client_max_body_size 9M; access_log /var/log/nginx/discord_proxy.log discord_logs; proxy_pass [https://discord.com](https://discord.com); location /api/v./webhooks/ {
+            limit_req zone=unauth_global burst=2000;
+            limit_req_status 597; proxy_set_header Authorization "";
+            proxy_pass [https://discord.com](https://discord.com);
+        }
+    } listen 10.0.0.6:8080;
+}
+```
+
+We have split the global rate limit into two separate buckets. One that counts requests that are linked to the bot (auth_global) and one that counts requests that are linked to the IP (unauth_global). In this example we only count requests to webhook endpoints into the second bucket. There are a few other endpoints that don't require authentication and could therefore be added here.
+
+We also added a small cache that currently only caches error responses for requests that result in a 404 or 401 status code. Endpoints that return 404 are very unlikely to not return 404 at any point in the future so it makes sense to cache them. 401 responses indicate that the token is invalid which requires a human to replace the token.
+
+We could also cache successful responses for some endpoints like users and guilds. But we already have an internal cache at another place so it wouldn't make sense to add another layer here.
+
+> Thanks to Blue, the developer of “Not Quite Nitro” for providing the idea and initial Nginx config for the request proxy.
+
+## Conclusion
+
+There are many different ways to handle rate limits and the more processes you have that want to interact with the Discord API the more complex it becomes. For 99% of bots it's fine to just handle rate limits inside the bot process itself. For the remaining 1% it might make sense to look into synchronizing rate limits across processes or to use a central request proxy. (or both)

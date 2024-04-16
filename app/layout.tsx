@@ -1,0 +1,77 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./styles/globals.css";
+import "./styles/eostrix.css";
+import clsx from "clsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGithub,
+  faDiscord,
+  faLinkedin,
+} from "@fortawesome/free-brands-svg-icons";
+import Link from "next/link";
+import CopyrightNotice from "./components/CopyrightNotice";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Merlin Fuchs",
+  description: "22 year old tech enthusiast and web developer from Germany",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={clsx(
+          "bg-dark text-gray-100 px-5 leading-9",
+          inter.className
+        )}
+      >
+        <div className="max-w-4xl mx-auto my-12">
+          <div className="flex mb-14 justify-between space-x-5">
+            <Link
+              href="/"
+              className="font-semibold text-2xl text-orange-300 tracking-wide"
+            >
+              Merlin Fuchs
+            </Link>
+            <div className="flex items-center space-x-5 text-gray-300">
+              <a href="https://github.com/merlinfuchs" target="_blank">
+                <FontAwesomeIcon
+                  icon={faGithub}
+                  className="h-5 w-5 hover:text-orange-300"
+                />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/merlin-fuchs/"
+                target="_blank"
+              >
+                <FontAwesomeIcon
+                  icon={faLinkedin}
+                  className="h-6 w-6 hover:text-orange-300"
+                />
+              </a>
+              <a
+                href="https://discord.com/users/386861188891279362"
+                target="_blank"
+              >
+                <FontAwesomeIcon
+                  icon={faDiscord}
+                  className="h-6 w-6 hover:text-orange-300"
+                />
+              </a>
+            </div>
+          </div>
+          <div className="text-gray-200">{children}</div>
+
+          <CopyrightNotice />
+        </div>
+      </body>
+    </html>
+  );
+}

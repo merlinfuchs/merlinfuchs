@@ -1,0 +1,88 @@
+<title>Cross-compiling Rust From Mac to Linux</title>
+
+# Cross-compiling Rust From Mac to Linux
+
+_A journey through the issues I encountered_
+
+<PostDate date="2022-06-08" />
+
+![Rust Crab](/rust-crab.webp)
+
+While trying to cross-compile rust from Mac to Linux I ran into a few issues, so I thought I would write a simple guide for myself and anyone else interested. This mainly consists of my own findings and might not work for everyone.
+
+## General steps
+
+To cross-compile from one platform to another, it's usually not enough to just install the standard library for the target using [rustup](https://rustup.rs/). You also have to install a linker for the platform and tell `rustc` where to find it.
+
+For some platforms, other dependencies might be necessary as well, but in this article, I will concentrate on compiling from Mac to Linux.
+
+Generally, these are the steps necessary to compile from one platform to another:
+
+- Install the standard library for the target using `rustup target add <target>`
+- Install a linker for the platform
+- [Update the cargo configuration](https://doc.rust-lang.org/cargo/reference/config.html#target) so `rustc` can find the linker
+- Set the `TARGET_CC` environment variable to the linker executable during compilation
+- Add the target flag to your build command: `cargo build --release --target <target>`
+
+## Choosing the build target
+
+When choosing the right build target I had the choice between `x86_64-unknown-linux-gnu` and `x86_64-unknown-linux-musl`.
+
+The `musl` target produces a statically linked binary using the musl C standard library which aims to be very lightweight and simple. The benefit of statically linking the C standard library is that it will run on basically any modern Linux operating system with no dependencies. The drawback is that `musl` is often quite a bit slower than `glibc` and therefore not the optimal choice for many projects.
+
+The `gnu` target on the other hand produces a dynamically linked binary which depends on `glibc` being installed on the host system.
+
+Because `glibc` is often a bit faster than `musl` I decided to go with the `gnu` target. But I will also explain how to build for the `musl` target.
+
+### GNU
+
+The first step is always to install the standard library using `rustup`. This is simply done using `rustup target add x86_64-unknown-linux-gnu`.
+
+But to actually compile to the given target we also need a linker. For this we will use a homebrew formula provided by the community:
+
+```shell
+brew install SergioBenitez/osxct/x86_64-unknown-linux-gnu
+```
+
+Now that the linker is installed we need to tell `rustc` where to find it. This can be done by updating the [.cargo/config.toml](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure) and adding the linker for the target:
+
+```toml
+[target.x86_64-unknown-linux-gnu]
+linker = "x86_64-unknown-linux-gnu-gcc"
+```
+
+Now you might already be able to compile to the target using `cargo build --target x86_64-unknown-linux-gnu`, but for many projects, it will also be necessary to set the `TARGET_CC` environment variable to the linker executable. A full build command could therefore look like this:
+
+```shell
+TARGET_CC=x86_64-unknown-linux-gnu cargo build --release --target x86_64-unknown-linux-gnu
+```
+
+This is it! You can now cross-compile from Mac to Linux!  
+Keep in mind that the produced binary is dynamically linked, so you might need to install other dependencies on the host system to make the executable work.
+
+### MUSL
+
+First, we need to install the standard library using `rustup`. This is simply done by running `rustup target add x86_64-unknown-linux-musl`.
+
+To actually compile to the given target we also need a linker. For this we will use a homebrew formular provided by the community:
+
+```shell
+brew install FiloSottile/musl-cross/musl-cross
+```
+
+Now that the linker is installed we need to tell rustc where to find it. This can be done by updating the [.cargo/config.toml](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure) and adding the linker for the target:
+
+```toml
+[target.x86_64-unknown-linux-musl]
+linker = "x86_64-linux-musl-gcc"
+```
+
+Now you might already be able to compile to the target using `cargo build --target x86_64-unknown-linux-musl`, but for many projects it will also be necessary to set the `TARGET_CC` environment variable to the linker executable. A full build command could therefore look like this:
+
+```shell
+TARGET_CC=x86_64-linux-musl-gcc cargo build --release --target x86_64-unknown-linux-musl
+```
+
+That's it! You can now cross-compile from Mac to Linux.
+
+The produced binary is statically linked and should run on most modern Linux operating systems.

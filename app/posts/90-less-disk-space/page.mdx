@@ -1,0 +1,121 @@
+<title>90% less disk space</title>
+
+# 90% less disk space
+
+_How we reduced the disk space usage of our database by almost 90%_
+
+<PostDate date="2021-10-18" />
+
+![You Shall Compress](/you-shall-compress.webp)
+
+[Xenon](https://xenon.bot) saves a lot of data including complete discord servers with server settings, channels, roles, and even bans, members, and messages. To store these information we are using MongoDB, a document-oriented database.
+
+Disk space was never really a problem with MongoDB, even with over 2.5 Million server backups in our database it barely used 100GB of disk space. While 100GB are easily manageable, reducing the size can still have many advantages. One of the biggest pain points was always migrating the data between servers and backing it up properly. Exporting, uploading, and then importing the data usually took hours to complete.
+
+This is why we looked into reducing the size of our database and have found two very effective measures that reduced the size of our database by almost 90%.
+
+## Considerations
+
+The “backups” collection is by far the biggest collection in our database. It contains all the server backups and makes up 95% of the stored data. That’s why this collection was the main target to reduce the disk space usage. The following changes depend on two key characteristics of the data that is stored in the “backups” collection:
+
+### Fixed Format
+
+The format of server backups never changed in a substantial way. It rarely happens that new properties are added and basically never that existing ones are changed.
+
+Server Backups are basically just a huge JSON document that contains all the information that are required to recreate the server. A highly simplified version could look similar to this:
+
+```json
+{
+    "name": "Cool Server",
+    "icon": null,
+    "channels": [
+        {
+            "id": "524652984425250847",
+            "name": "general",
+            "type": 0,
+            "messages": [...]
+        }
+    ],
+    "roles": [
+        {
+            "id": "416358583220043796",
+            "name": "@everyone",
+            "color": 0
+        }
+    ],
+    "bans": [...],
+    "members": [...]
+}
+```
+
+### Rarely Accessed
+
+Backups are rarely read or written. Most users create a few backups of their server every now and then and only access them when they really need them.
+
+## BSON -> Protobuf
+
+MongoDB uses the data exchange format called “BSON” to store information. BSON stands for “Binary JSON” and aims to store JSON compatible objects in a more compact way. BSON is, in contrast to JSON, not meant to be human readable.
+
+Protocol buffers on the other hand is a data exchange format developed by Google. In comparison to BSON (and JSON) you have to define a structure for your data beforehand in a specific format which can later be compiled to code in many different programming languages.
+
+This is how the structure for the JSON object from above could look like in Protobuf:
+
+```protobuf
+syntax = "proto3";
+
+package xenon.backups;
+
+message BackupData {
+  message Role {
+    string id = 1;
+    string name = 2;
+    uint32 color = 3;
+  }
+  message Channel {
+    string id = 1;
+    uint32 type = 2;
+    string name = 3;
+  }
+
+  string name = 1;
+  string icon = 2;
+
+  repeated Role roles = 3;
+  repeated Channel channels = 4;
+}
+```
+
+By knowing the exact position, type, and name of each field beforehand Protobuf can achieve way better results than BSON (and JSON) in both speed and size.
+
+To store Protocol buffers in MongoDB we just serialize them to a byte string which is stored as a field in a normal BSON document. Filtering documents by the fields in the Protobuf byte string is obviously impossible. This is why we store some additional metadata as normal BSON fields that are used to index and query the collection.
+
+## Pre-Compressing
+
+Compression is always a trade-off between speed and compression ratio. For our “backups” collection it makes sense to prioritize compression ratio over speed because documents are rarely read and written.
+
+[MongoDB uses WiredTiger](https://docs.mongodb.com/manual/core/wiredtiger/) as the default storage engine which uses [snappy](http://google.github.io/snappy/) as the default compression library. Snappy prioritizes speed over compression ratio, which makes sense for most use-cases of MongoDB but isn’t optimal for our “backups” collection.
+
+Instead of changing the compression algorithm for the whole MongoDB instance we have decided to pre-compress backups before even putting them into MongoDB. The compression algorithm that we are using for this is [Brotli](https://github.com/google/brotli). It’s a general-purpose compression algorithm by Google that achieves one of the best compression ratios while being relatively slow in comparison to algorithms like snappy.
+
+Brotli can target different compression levels that indicate how aggressive the algorithm works. We have decided to use level 11 for our “backups” collection which is the highest level and therefore offers the best compression ratio. Higher compression levels tend to be a lot slower while compressing data (even less than 1MB/s at level 11) but don’t have a big effect on the decompression speed. This is fine for our use-case because we can easily afford the computation time before storing a backup.
+
+So in practice all backups go through two compression steps before being written to the disk. First we are compressing the data using Brotli and then put them into MongoDB. The storage engine of MongoDB then compresses it using snappy and writes it to the disk. The results are far better than using snappy alone but require a lot of computation time when a new backup is stored.
+
+## Conclusion
+
+The final document in our “backups” collection could look like this:
+
+```json
+{
+    "_id": "44blidf3s8",
+    "timestamp": ISODate("2019-12-23T16:43:15.085Z"),
+    "user_id": "386861188891279362",
+    "guild_id": "410488579140354049",
+    "guild_name": "WALES",
+    "data": BinData(0, "034IRxQjRGOFeuG18tvcnaueAWRAs ...")
+}
+```
+
+Where `data` is the serialized and compressed backup data and the other fields are used to index and query the collection. This allows us to serialize and compress the data to save a lot of disk space while still being able to execute efficient queries.
+
+These two changes and few smaller tweaks allowed us to save almost 90% of disk space and made it way easier to manage our database.
