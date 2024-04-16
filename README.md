@@ -1,6 +1,6 @@
 # Hi, I'm Merlin! 👋
 
-I'm a pationate software engineer from Germany who loves to tinker with new technologies.
+I'm a passionate software engineer from Germany who loves to tinker with new technologies.
 Right now I spent a lot of time working with React, TypeScript, and Go.
 Every now and then I also like to take on a fight with the Rust compiler.
 
