@@ -15,7 +15,7 @@ async function run() {
     .map((post) => `- [${post.title}](${post.url})`)
     .join("\n");
 
-  const readme = `${intro}\n\n## Recent Posts\n\n${postList}`;
+  const readme = `${intro}\n\n## My latest posts\n\n${postList}`;
 
   await fs.writeFile(readmeFile, readme);
 }

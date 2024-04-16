@@ -14,7 +14,7 @@ With [Xenon](https://xenon.bot) and [Embed Generator](https://message.style) I'm
 If you want to learn more check out my [Github](https://github.com/merlinfuchs) or shoot me an email at `hi[at]merlin.gg`!
 
 
-## Recent Posts
+## My latest posts
 
 - [Cross-compiling Rust From Mac to Linux](https://merlin.gg/posts/cross-compiling-rust-from-mac-to-linux)
 - [90% less disk space](https://merlin.gg/posts/90-less-disk-space)
