@@ -16,8 +16,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h3: function H3(props) {
       return <h3 className="text-2xl font-semibold my-6" {...props} />;
     },
+    h4: function H4(props) {
+      return <h4 className="text-xl font-semibold my-6" {...props} />;
+    },
     p: function P(props) {
       return <p className="text-xl leading-9 font-light my-6" {...props} />;
+    },
+    strong: function Strong(props) {
+      return <strong className="font-semibold" {...props} />;
     },
     a: function A(props) {
       return (
@@ -33,6 +39,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     ul: function Ul(props) {
       return <ul className="pl-5 my-6 list-disc" {...props} />;
+    },
+    ol: function Ul(props) {
+      return <ul className="pl-5 my-6 list-decimal" {...props} />;
     },
     code: function Code(props) {
       return <code {...props} className="bg-[#06090E] p-1 rounded font-mono" />;
