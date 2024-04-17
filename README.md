@@ -16,6 +16,6 @@ If you want to learn more check out my [Github](https://github.com/merlinfuchs) 
 
 ## My latest posts
 
-- [Asking the right questions](https://merlin.gg/posts/asking-good-support-questions)
+- [Asking the right questions](https://merlin.gg/posts/asking-the-right-questions)
 - [Cross-compiling Rust From Mac to Linux](https://merlin.gg/posts/cross-compiling-rust-from-mac-to-linux)
 - [90% less disk space](https://merlin.gg/posts/90-less-disk-space)
