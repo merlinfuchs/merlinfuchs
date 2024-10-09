@@ -11,7 +11,7 @@ async function run() {
   const posts = await getPosts({ isExternal: true });
 
   const postList = posts
-    .slice(0, 3)
+    .slice(0, 4)
     .map((post) => `- [${post.title}](${post.url})`)
     .join("\n");
 
