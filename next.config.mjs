@@ -5,6 +5,15 @@ import rehypePrism from "@mapbox/rehype-prism";
 const nextConfig = {
   output: "export",
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+  redirects: async () => {
+    return [
+      {
+        source: "/gallery",
+        destination: "/gallery/2024-barcelona",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const mdxConfig = {
