@@ -22,6 +22,8 @@ export const getAlbums = async () => {
 
   const res = [] as Album[];
   for (const album of albums) {
+    if (album === ".DS_Store") continue;
+
     const photos = await fs.readdir(path.resolve(albumsDir, album));
 
     const photosWithSize = await Promise.all(
