@@ -6,7 +6,7 @@ export default async function RecentPosts() {
 
   return (
     <div className="mt-12">
-      <h2 className="text-2xl font-semibold tracking-wide">My latest posts</h2>
+      <h3 className="text-2xl font-semibold tracking-wide">My latest posts</h3>
       <ul className="list-disc pl-5 text-lg my-6">
         {posts.map((post) => (
           <li key={post.slug} className="my-1">
