@@ -1,12 +1,12 @@
 import Link from "next/link";
-import LOGS from "../lib/logs";
+import JOURNALS from "../lib/journals";
 
-export default async function RecentLogs() {
+export default async function RecentJournals() {
   return (
     <div className="mt-12">
       <h3 className="text-2xl font-semibold tracking-wide">My latest logs</h3>
       <ul className="list-disc pl-5 text-lg my-6">
-        {LOGS.map((log) => (
+        {JOURNALS.map((log) => (
           <li key={log.title} className="my-1">
             <Link
               href={log.url}

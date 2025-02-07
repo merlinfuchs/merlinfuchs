@@ -1,4 +1,4 @@
-const LOGS = [
+const JOURNALS = [
   {
     key: "2025-gronolen",
     title: "2025 Grønolen",
@@ -21,4 +21,4 @@ const LOGS = [
   },
 ];
 
-export default LOGS;
+export default JOURNALS;
