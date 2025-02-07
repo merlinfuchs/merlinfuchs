@@ -4,6 +4,7 @@ import CodeCaption from "./app/components/CodeCaption";
 import JournalMap from "./app/components/JournalMap";
 import JournalGallery from "./app/components/JournalGallery";
 import JournalDate from "./app/components/JournalDate";
+import OtherLogs from "./app/components/OtherLogs";
 import linkStyles from "./app/styles/Link.module.css";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -57,6 +58,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     JournalMap,
     JournalDate,
     JournalGallery,
+    OtherLogs,
     ...components,
   };
 }
