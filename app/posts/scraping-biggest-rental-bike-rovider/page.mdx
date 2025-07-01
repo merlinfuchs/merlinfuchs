@@ -7,6 +7,7 @@ _How I reverse engineered the Nextbike app, scraped their API and built a tool t
 <PostDate date="2025-07-01" />
 
 ![Nextbike.lol](/nextbike-europe.webp)
+*Screenshot of the interactive map on [nextbike.lol](https://nextbike.lol)*
 
 Nextbike is the biggest rental bike provider in Europe. It's available in hundreds of cities across the continent and is mostly used for short term rentals.
 
@@ -79,7 +80,7 @@ The website is built with Next.js and Tailwind CSS. This is pretty overkill for 
 The map is rendered using the [React Map GL](https://visgl.github.io/react-map-gl/) and the open source fork of Mapbox called [MapLibre](https://maplibre.org/).
 
 ![Nextbike Bike History](/nextbike-bike-history.webp)
-*Location history of bike #23016 in Leipzig*
+*Location history of bike #23016 in Leipzig (nextbike.lol)*
 
 ## Future ideas
 
@@ -97,14 +98,14 @@ I think I only scratched the surface of what can be done with the data. Here are
 ChatGPT also suggested letting users "adopt" a bike and follow its daily adventures, like a Tamagotchi on wheels.
 So much for AI not being creative ...
 
-## Takeaways
+## What I Learned
 
 This was a fun exploratory project and a good way to spend my weekend. 
 I learned a lot about using Android Studio and HTTP Toolkit to reverse engineer mobile apps.
 
 I was surprised how easy it was to scrape all these information from Nextbike without any authentication or other restrictions. 
-I guess they just don't care about the data being accessible to anyone. 
+I guess they just don't care about the data being accessible to anyone. Maybe it's also because they share this data with other bike rental apps?
 
-Let's hope they don't change their API anytime soon, so I can do more fun stuff with this at some point.
+Let's hope they don't change their API anytime soon, so I can do more fun stuff with this at a later point.
 
 You can find the website at [nextbike.lol](https://nextbike.lol) and the code on [GitHub](https://github.com/merlinfuchs/nextbike.lol).
