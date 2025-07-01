@@ -1,0 +1,110 @@
+<title>Scraping the biggest rental bike provider</title>
+
+# Scraping the biggest rental bike provider
+
+_How I reverse engineered the Nextbike app, scraped their API and built a tool to visualize bike movement across Europe_
+
+<PostDate date="2025-07-01" />
+
+![Nextbike.lol](/nextbike-europe.webp)
+
+Nextbike is the biggest rental bike provider in Europe. It's available in hundreds of cities across the continent and is mostly used for short term rentals.
+
+I've been using Nextbike quite often ever since I moved to Leipzig.
+It's a great way to get around the city if you don't have your own bike or don't want to risk getting your bike stolen at some sketchy place during the night.
+
+Even without being logged into the app, you can scroll freely through the map and see where all the bikes are located. 
+This made me curious about how the app works and if I could maybe scrape some of the data.
+
+This turned out to be rabbit hole I didn't come out of for two days.
+
+## Reverse engineering the Nextbike app
+
+I would say I have quite a bit of experience reverse engineering websites, but this was my first time reverse engineering a mobile app. 
+
+I have only used Bluestacks in the past, but after some googling I found that it's quite tricky to intercept networks requests from it. 
+This is where I found that Android Studio has a built in emulator that is so much nicer to work with.
+
+After downloading **Android Studio** and creating a Virtual Device I was able to install and launch the Nextbike app in the emulator. 
+This was great but I still needed to find a way to intercept the network requests.
+
+This is where **HTTP Toolkit** came into play.
+It's an amazing tool that allows you to connect to the Virtual Device, install a custom certificate and then intercept the network requests made by any app. 
+You don't have to fiddle with any configuration, it just works!
+
+![Nextbike Emulator](/nextbike-emulator.webp)
+*Android Studio Emulator with HTTP Toolkit connected*
+
+Once you have the emulator running with HTTP Toolkit connected you can start the Nextbike app. 
+You will see that the app is making a lot of network requests when you scroll through the map. 
+Most of these go to Mapbox API (api.mapbox.com) and just return static data for rendering the map.
+
+What we are interested in are the requests to the Nextbike API. 
+Once we have filtered out the Mapbox requests we can see that the app is only making a few other requests.
+
+The most interesting request is argubly the one to **maps.nextbike.net**. 
+It loads the current location of all bikes, stations, and cities. It's important to note that this does only return the location of bikes that are currently parked.
+Bikes that are currently in use are sadly (or luckily) not included in the response.  
+As you can probably see from the request below, we are passing a few parameters to the endpoint including an API key.
+Turns out these are all optional and can be omitted, which makes it stupidly easy to scrape.
+
+![Nextbike Live](/nextbike-http-live.webp)
+*Request to the live map endpoint of the Nextbike API for the city of Leipzig*
+
+Another interesting request is the one to **zone-service.nextbikecloud.net**. 
+It loads the zones for a given city where bikes can be parked. 
+This endpoint also doesn't require any authentication which makes it equally easy to scrape.
+
+![Nextbike Zones](/nextbike-http-zones.webp)
+*Request to the zones endpoint of the Nextbike API for the city of Leipzig*
+
+## Collecting the data
+
+By combining these two endpoints we can get a complete picture of all bikes, stations, cities, and zones and their current locations from the Nextbike API.
+If we want to track the bike movement it's not enough to just get the current location once, we need to poll the API at regular intervals and store the data in a database.
+
+I have created a simple script that loads the data from the API and stores it in a database. 
+To keep the database size manageable it only stores the information about a bike when the location has changed.  
+To run the script periodically I have created a simple CRON job that runs it every 5 minutes. 
+This should be more than enough to get a good overview of the bike movement.
+
+The script is only a hundred lines of code and can be found on [GitHub](https://github.com/merlinfuchs/nextbike.lol/blob/main/nextbike-scraper/scrape.py).
+
+## Visualizing the data
+
+I knew I wanted to build a website out of this, so people can explore the data easily.
+
+The website is built with Next.js and Tailwind CSS. This is pretty overkill for just showing a map, but these are the tools I am most comfortable with.
+
+The map is rendered using the [React Map GL](https://visgl.github.io/react-map-gl/) and the open source fork of Mapbox called [MapLibre](https://maplibre.org/).
+
+![Nextbike Bike History](/nextbike-bike-history.webp)
+*Location history of bike #23016 in Leipzig*
+
+## Future ideas
+
+I think I only scratched the surface of what can be done with the data. Here are some ideas that I may or may not build in the future:
+
+- Replay of bike movement
+- Heatmap for bike parking
+- "Highway" & "Hotspot" detection
+- Nextbike revenue estimation
+- Average trip length
+- Activity by weekday and time
+- Activity by weather or other external data sources
+- Bike travel distance leaderboard
+
+ChatGPT also suggested letting users "adopt" a bike and follow its daily adventures, like a Tamagotchi on wheels.
+So much for AI not being creative ...
+
+## Takeaways
+
+This was a fun exploratory project and a good way to spend my weekend. 
+I learned a lot about using Android Studio and HTTP Toolkit to reverse engineer mobile apps.
+
+I was surprised how easy it was to scrape all these information from Nextbike without any authentication or other restrictions. 
+I guess they just don't care about the data being accessible to anyone. 
+
+Let's hope they don't change their API anytime soon, so I can do more fun stuff with this at some point.
+
+You can find the website at [nextbike.lol](https://nextbike.lol) and the code on [GitHub](https://github.com/merlinfuchs/nextbike.lol).
