@@ -1,5 +1,10 @@
 const JOURNALS = [
   {
+    key: "2025-zadar",
+    title: "2025 Zadar",
+    url: "/logs/2025-zadar",
+  },
+  {
     key: "2025-gronolen",
     title: "2025 Grønolen",
     url: "/logs/2025-gronolen",

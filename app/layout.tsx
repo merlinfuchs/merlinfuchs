@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./styles/globals.css";
-import "./styles/eostrix.css";
-import clsx from "clsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faGithub,
   faDiscord,
+  faGithub,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import clsx from "clsx";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import CopyrightNotice from "./components/CopyrightNotice";
+import "./styles/eostrix.css";
+import "./styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
