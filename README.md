@@ -17,7 +17,7 @@ If you want to learn more check out my [Github](https://github.com/merlinfuchs) 
 
 ## My latest posts
 
+- [Scraping the biggest rental bike provider](https://merlin.gg/posts/scraping-biggest-rental-bike-rovider)
 - [Building a No-Code Platform](https://merlin.gg/posts/building-a-nocode-platform)
 - [Asking the right questions](https://merlin.gg/posts/asking-the-right-questions)
 - [Cross-compiling Rust From Mac to Linux](https://merlin.gg/posts/cross-compiling-rust-from-mac-to-linux)
-- [90% less disk space](https://merlin.gg/posts/90-less-disk-space)
