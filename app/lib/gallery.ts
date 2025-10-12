@@ -27,17 +27,19 @@ export const getAlbums = async () => {
     const photos = await fs.readdir(path.resolve(albumsDir, album));
 
     const photosWithSize = await Promise.all(
-      photos.map(async (photo) => {
-        const path = `${albumsDir}/${album}/${photo}`;
-        const size = await imageSize(path);
+      photos
+        .filter((photo) => photo !== ".DS_Store")
+        .map(async (photo) => {
+          const path = `${albumsDir}/${album}/${photo}`;
+          const size = await imageSize(path);
 
-        return {
-          key: photo,
-          src: `/albums/${album}/${photo}`,
-          width: size.width!,
-          height: size.height!,
-        };
-      })
+          return {
+            key: photo,
+            src: `/albums/${album}/${photo}`,
+            width: size.width!,
+            height: size.height!,
+          };
+        })
     );
 
     const name = album

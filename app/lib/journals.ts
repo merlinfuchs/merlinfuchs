@@ -1,5 +1,15 @@
 const JOURNALS = [
   {
+    key: "2025-canada",
+    title: "2025 Canada",
+    url: "/logs/2025-canada",
+  },
+  {
+    key: "2025-copenhagen",
+    title: "2025 Copenhagen",
+    url: "/logs/2025-copenhagen",
+  },
+  {
     key: "2025-zadar",
     title: "2025 Zadar",
     url: "/logs/2025-zadar",
