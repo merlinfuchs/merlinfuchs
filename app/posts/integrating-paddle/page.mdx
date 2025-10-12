@@ -1,0 +1,92 @@
+<title>Switching from Patreon to Paddle</title>
+
+# Switching from Patreon to Paddle
+
+_Why I switched from Patreon to Paddle as my payment processor and what I learned along the way_
+
+<PostDate date="2025-10-12" />
+
+![Paddle Sport](/paddle.webp)
+
+## What is Paddle?
+
+Paddle is a payment processor that acts as a merchant of record for your business. This means it handles legal and financial responsibilities like sales tax, refunds, and chargebacks, then transfers the money to your bank account as one payment.
+
+The biggest benefit over traditional processors like Stripe is that you don't have to worry about sales tax compliance.
+
+## Why switch from Patreon?
+
+Patreon was great when I started my projects over 7 years ago. It was an easy way to monetize things and allow users to pay for specific features.
+
+The fact is that I always kind of abused Patreon. It really was never meant to be used for things like selling subscriptions for software. 
+It was always meant to be used for content creators to sell their content and their fans to support them.
+
+You can see that in the way Patreon is designed and how it's marketed. It's all about content creation, and publishing exclusive content rather than selling a product.
+
+### High Fees
+
+Patreon charges multiple fees: a 5% platform fee (12% for new creators), plus 2.9% + $0.30 per payment, plus additional fees through Payoneer for wire transfers. This totaled **10-12%** in fees.
+
+Paddle's fee structure is much simpler: **5% + $0.50** per transaction with no hidden costs - roughly **5-6% total** compared to Patreon's 10-12%.
+
+### Deprecation of API
+
+I relied on Patreon's API to grant features based on subscription tiers. In 2020, Patreon announced they would stop supporting the API due to resource constraints, with rumors of complete deprecation.
+
+This makes sense since Patreon is built for content creators, not software subscriptions. For me, this meant I couldn't rely on Patreon long-term.
+
+## Making the switch
+
+When I made the decision to switch from Patreon to Paddle I was fairly confident that I would be able to do it in just a few days. 
+I was already using Paddle for one of my other projects and knew how to integrate it.
+
+### The Application Process
+
+Because Paddle acts as a merchant of record for your business they can't just let anyone use their service. 
+To get access your have to apply with a legitimate business and website that Paddle considers safe.
+
+According to some [posts on Reddit](https://www.reddit.com/r/SaaS/comments/1im5ezn/a_6week_journey_to_getting_approved_by_paddle/) it can take weeks to get approved. 
+In my case it luckily only took about 3 days.
+
+Even after getting approved you have to be careful to follow all the rules by Paddle to avoid getting your account suspended. In the end all your payments go through Paddle so they can shut you down at any point.
+
+### Embedded vs Hosted Checkout
+
+Paddle offers two checkout options: embedded (integrated into your site) and hosted (redirects to Paddle's page).
+
+I initially chose embedded thinking it would be more user-friendly, but analytics showed almost all users were abandoning the checkout process. No amount of tweaking improved conversion.
+
+Switching to hosted checkout immediately improved conversion rates significantly. Users likely perceive the hosted checkout as more secure and trustworthy than entering payment info on a random website.
+
+### Analytics Matter
+
+I was constantly checking analytics during implementation. Without proper tracking, I would have never discovered that the embedded checkout was hurting conversion rates.
+
+### Subscription Management
+
+With Paddle, I had to build my own subscription management system. Using the Paddle SDK, this wasn't too difficult.
+
+However, I noticed many users were cancelling immediately after subscribing - something that didn't happen with Patreon. I was redirecting users to a billing page with a prominent cancel button that worked instantly.
+
+I made cancellation too easy, so I added more steps to the process. Users can still cancel immediately, but now they have to go through additional confirmation steps.
+
+
+## Key Takeaways
+
+1. **Hosted checkout > Embedded checkout** - Despite seeming less user-friendly, hosted checkout significantly improved conversion rates
+2. **Analytics are essential** - Without proper tracking, I would have never discovered the checkout issue
+3. **Subscription UX matters** - Making cancellation too easy can hurt retention
+4. **Fee transparency** - Paddle's straightforward 5% fee structure is much clearer than Patreon's complex fee system
+5. **Migration takes time** - Even with existing Paddle experience, the full migration took a few weeks
+
+## Recommendations
+
+If you're considering a similar switch:
+
+- **Start with analytics** - Set up proper tracking before making changes
+- **Test both checkout options** - Don't assume embedded is better
+- **Plan for subscription management** - You'll need to build your own system
+- **Expect a longer timeline** - Migrations always take longer than expected
+- **Consider your business model** - Paddle works great for software subscriptions
+
+I'm glad I made the switch and I'm looking forward to ditching Patreon for good. 
