@@ -13,7 +13,7 @@ import "./styles/eostrix.css";
 import "./styles/globals.css";
 import * as swetrix from "swetrix";
 
-if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+if (typeof window !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
     swetrix.init("J5f9TOyaRqyB", {
       apiURL: "https://swetrix.vaven.io/log",
