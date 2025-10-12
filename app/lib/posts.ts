@@ -11,13 +11,17 @@ interface PostFile {
 interface Post extends PostFile {
   title: string;
   postDate: Date;
+  thumbnail?: string;
   url: string;
 }
 
 export const getPosts = async ({ isExternal }: { isExternal: boolean }) => {
   const files = await fs.readdir(postsDir);
   const posts = await Promise.all(
-    files.map(deconstructDirname).map(toPost(isExternal))
+    files
+      .filter((f) => !f.includes("."))
+      .map(deconstructDirname)
+      .map(toPost(isExternal))
   );
 
   return posts.sort((a, b) => b.postDate.getTime() - a.postDate.getTime());
@@ -40,6 +44,7 @@ function toPost(isExternal: boolean): (post: PostFile) => Promise<Post> {
       ...post,
       title: meta.title,
       postDate: meta.postDate,
+      thumbnail: meta.thumbnail,
       url: isExternal
         ? `https://merlin.gg/posts/${post.slug}`
         : `/posts/${post.slug}`,
@@ -56,10 +61,18 @@ const getPostDate = (str: string) => {
   return date;
 };
 
+const getPostThumbnail = (str: string) => {
+  const match = str.match(/^!\[.*\]\((.*)\)/);
+  if (!match) return null;
+
+  return match[1];
+};
+
 function getMdMeta(md: string) {
   const res = {
     title: "",
     postDate: new Date(),
+    thumbnail: undefined as string | undefined,
   };
 
   let lines = md.split("\n");
@@ -71,6 +84,11 @@ function getMdMeta(md: string) {
     const postDate = getPostDate(lines[i]);
     if (postDate) {
       res.postDate = postDate;
+    }
+
+    const thumbnail = getPostThumbnail(lines[i]);
+    if (thumbnail) {
+      res.thumbnail = thumbnail;
     }
   }
 

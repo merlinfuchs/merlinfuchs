@@ -14,7 +14,6 @@ Recently I launched [Kite](https://kite.onl), a no-code platform for building Di
 
 If you want to learn more check out my [Github](https://github.com/merlinfuchs) or shoot me an email at `hi[at]merlin.gg`!
 
-
 ## My latest posts
 
 - [Scraping the biggest rental bike provider](https://merlin.gg/posts/scraping-biggest-rental-bike-rovider)

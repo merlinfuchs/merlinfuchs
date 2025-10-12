@@ -16,6 +16,9 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
+      scale: {
+        "102": "1.02",
+      },
     },
   },
 };

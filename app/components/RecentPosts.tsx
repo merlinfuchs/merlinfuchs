@@ -7,8 +7,8 @@ export default async function RecentPosts() {
   return (
     <div className="mt-12">
       <h3 className="text-2xl font-semibold tracking-wide">My latest posts</h3>
-      <ul className="list-disc pl-5 text-lg my-6">
-        {posts.map((post) => (
+      <ul className="list-disc pl-5 text-lg mt-6 mb-4">
+        {posts.slice(0, 4).map((post) => (
           <li key={post.slug} className="my-1">
             <Link
               href={post.url}
@@ -19,6 +19,13 @@ export default async function RecentPosts() {
           </li>
         ))}
       </ul>
+
+      <Link
+        href="/posts"
+        className="text-blue-200 visited:text-blue-200 hover:text-blue-300 transition-all transition-duration-150 transition-timing-function-ease-in tracking-wide"
+      >
+        View all posts
+      </Link>
     </div>
   );
 }
