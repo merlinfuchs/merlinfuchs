@@ -11,6 +11,19 @@ import Link from "next/link";
 import CopyrightNotice from "./components/CopyrightNotice";
 import "./styles/eostrix.css";
 import "./styles/globals.css";
+import * as swetrix from "swetrix";
+
+if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    swetrix.init("J5f9TOyaRqyB", {
+      apiURL: "https://swetrix.vaven.io/log",
+    });
+    swetrix.trackViews();
+    swetrix.trackErrors({
+      sampleRate: 1,
+    });
+  });
+}
 
 const inter = Inter({ subsets: ["latin"] });
 
