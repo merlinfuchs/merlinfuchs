@@ -19,7 +19,7 @@ const JOURNALS = [
     key: "2025-zadar",
     title: "2025 Zadar",
     url: "/logs/2025-zadar",
-    thumbnail: "/albums/2025-zadar/R0003888-min.jpg",
+    thumbnail: "/albums/2025-zadar/R0003888-min.JPG",
     longitude: 15.2314,
     latitude: 44.1194,
   },
