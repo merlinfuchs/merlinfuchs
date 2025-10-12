@@ -9,21 +9,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import CopyrightNotice from "./components/CopyrightNotice";
+import SwetrixAnalytics from "./components/SwetrixAnalytics";
 import "./styles/eostrix.css";
 import "./styles/globals.css";
-import * as swetrix from "swetrix";
-
-if (typeof window !== "undefined") {
-  document.addEventListener("DOMContentLoaded", () => {
-    swetrix.init("J5f9TOyaRqyB", {
-      apiURL: "https://swetrix.vaven.io/log",
-    });
-    swetrix.trackViews();
-    swetrix.trackErrors({
-      sampleRate: 1,
-    });
-  });
-}
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +33,7 @@ export default function RootLayout({
           inter.className
         )}
       >
+        <SwetrixAnalytics />
         <div className="max-w-4xl mx-auto my-12">
           <div className="flex mb-14 justify-between space-x-5">
             <Link
