@@ -13,6 +13,11 @@ export type Photo = {
   src: string;
   width: number;
   height: number;
+  thumbnail: {
+    src: string;
+    width: number;
+    height: number;
+  };
 };
 
 const albumsDir = path.resolve("public/albums");
@@ -28,16 +33,24 @@ export const getAlbums = async () => {
 
     const photosWithSize = await Promise.all(
       photos
-        .filter((photo) => photo !== ".DS_Store")
+        .filter((photo) => photo !== ".DS_Store" && photo !== "thumbnails")
         .map(async (photo) => {
           const path = `${albumsDir}/${album}/${photo}`;
+          const thumbnailPath = `${albumsDir}/${album}/thumbnails/${photo}`;
+
           const size = await imageSize(path);
+          const thumbnailSize = await imageSize(thumbnailPath);
 
           return {
             key: photo,
             src: `/albums/${album}/${photo}`,
             width: size.width!,
             height: size.height!,
+            thumbnail: {
+              src: `/albums/${album}/thumbnails/${photo}`,
+              width: thumbnailSize.width!,
+              height: thumbnailSize.height!,
+            },
           };
         })
     );

@@ -10,6 +10,7 @@ import "yet-another-react-lightbox/styles.css";
 import { RowsPhotoAlbum } from "react-photo-album";
 import JournalMap from "./JournalMap";
 import "react-photo-album/rows.css";
+import JournalMapBig from "./JournalMapBig";
 
 export default function GalleryPhotos(props: {
   photos: Photo[];
@@ -33,10 +34,28 @@ export default function GalleryPhotos(props: {
     }
   }, [props.map, props.photos]);
 
+  const thumbnails = useMemo(() => {
+    const photos = props.photos.map((photo) => photo.thumbnail);
+
+    if (props.map) {
+      return [
+        {
+          key: "map",
+          src: "map",
+          width: 16,
+          height: 9,
+        },
+        ...photos,
+      ];
+    } else {
+      return photos;
+    }
+  }, [props.map, props.photos]);
+
   return (
     <div>
       <RowsPhotoAlbum
-        photos={photos}
+        photos={thumbnails}
         onClick={({ index }) => setIndex(index)}
         render={{
           /* extras: (_, { photo }) => {
@@ -58,10 +77,7 @@ export default function GalleryPhotos(props: {
           image: (img) => {
             if (img.src === "map") {
               return (
-                <div
-                  className="rounded-md aspect-video overflow-hidden cursor-default"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <div className="rounded-md aspect-video overflow-hidden cursor-pointer">
                   <JournalMap
                     longitude={props.map!.longitude}
                     latitude={props.map!.latitude}
@@ -81,6 +97,25 @@ export default function GalleryPhotos(props: {
         index={index}
         close={() => setIndex(-1)}
         plugins={[Fullscreen, Slideshow, Zoom]}
+        render={{
+          slide: ({ slide }) => {
+            if (slide.src === "map") {
+              return (
+                <div className="h-full w-full">
+                  <JournalMapBig
+                    longitude={props.map!.longitude}
+                    latitude={props.map!.latitude}
+                    zoom={props.map!.zoom + 1.5}
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <img src={slide.src} alt={slide.alt} className="rounded-md" />
+            );
+          },
+        }}
       />
     </div>
   );
