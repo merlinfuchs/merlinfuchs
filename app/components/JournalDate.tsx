@@ -11,12 +11,12 @@ export default function PostDate({
   const end = new Date(`${endDate}T00:00:00-05:00`);
 
   return (
-    <div className="text-zinc-400 text-[1rem] font-light mb-5">
+    <span className="block text-zinc-400 text-[1rem] font-light mb-5">
       <time dateTime={startDate}>
         {start.toLocaleDateString("en-US", options)}
       </time>{" "}
       -{" "}
       <time dateTime={endDate}>{end.toLocaleDateString("en-US", options)}</time>
-    </div>
+    </span>
   );
 }

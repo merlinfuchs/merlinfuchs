@@ -5,6 +5,7 @@ import JournalMap from "./app/components/JournalMap";
 import JournalGallery from "./app/components/JournalGallery";
 import JournalDate from "./app/components/JournalDate";
 import OtherJournals from "./app/components/OtherJournals";
+import MadeByHumanBadge from "./app/components/MadeByHumanBadge";
 import linkStyles from "./app/styles/Link.module.css";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -57,14 +58,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     img: function Img(props) {
       return (
-        <div>
+        <>
           <img className="rounded-lg w-full" {...props} />
           {props.alt && (
-            <div className="text-sm italic mt-1.5" aria-hidden>
+            <span className="block text-sm italic mt-1.5" aria-hidden>
               {props.alt}
-            </div>
+            </span>
           )}
-        </div>
+        </>
       );
     },
     blockquote: function Quote(props) {
@@ -78,6 +79,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     JournalDate,
     JournalGallery,
     OtherJournals,
+    MadeByHumanBadge,
     ...components,
   };
 }
