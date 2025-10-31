@@ -43,7 +43,11 @@ export default function RootLayout({
               Merlin Fuchs
             </Link>
             <div className="flex items-center space-x-5 text-gray-300">
-              <a href="https://github.com/merlinfuchs" target="_blank">
+              <a
+                href="https://github.com/merlinfuchs"
+                aria-label="Find me on Github"
+                target="_blank"
+              >
                 <FontAwesomeIcon
                   icon={faGithub}
                   className="h-5 w-5 hover:text-orange-300"
@@ -52,6 +56,7 @@ export default function RootLayout({
               <a
                 href="https://www.linkedin.com/in/merlin-fuchs/"
                 target="_blank"
+                aria-label="Find me on LinkedIn"
               >
                 <FontAwesomeIcon
                   icon={faLinkedin}
@@ -61,6 +66,7 @@ export default function RootLayout({
               <a
                 href="https://discord.com/users/386861188891279362"
                 target="_blank"
+                aria-label="Find me on Discord"
               >
                 <FontAwesomeIcon
                   icon={faDiscord}

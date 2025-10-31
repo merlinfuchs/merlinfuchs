@@ -15,16 +15,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     h2: function H2(props) {
-      return <h2 className="text-3xl font-semibold my-6" {...props} />;
+      return (
+        <h2
+          className="text-3xl font-semibold mt-10 border-b border-gray-800 pb-3 mb-4"
+          {...props}
+        />
+      );
     },
     h3: function H3(props) {
-      return <h3 className="text-2xl font-semibold my-6" {...props} />;
+      return <h3 className="text-2xl font-semibold mt-10 mb-4" {...props} />;
     },
     h4: function H4(props) {
-      return <h4 className="text-xl font-semibold my-6" {...props} />;
+      return <h4 className="text-xl font-semibold mt-8 mb-4" {...props} />;
     },
     p: function P(props) {
-      return <p className="text-xl leading-9 font-light my-6" {...props} />;
+      return <p className="text-xl leading-9 font-light mb-6" {...props} />;
     },
     strong: function Strong(props) {
       return <strong className="font-semibold" {...props} />;
@@ -42,16 +47,30 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     ul: function Ul(props) {
-      return <ul className="pl-5 my-6 list-disc" {...props} />;
+      return <ul className="pl-5 mb-6 list-disc" {...props} />;
     },
     ol: function Ul(props) {
-      return <ul className="pl-5 my-6 list-decimal" {...props} />;
+      return <ul className="pl-5 mb-6 list-decimal" {...props} />;
     },
     code: function Code(props) {
       return <code {...props} className="bg-[#06090E] p-1 rounded font-mono" />;
     },
     img: function Img(props) {
-      return <img className="rounded-lg w-full" {...props} />;
+      return (
+        <div>
+          <img className="rounded-lg w-full" {...props} />
+          {props.alt && (
+            <div className="text-sm italic mt-1.5" aria-hidden>
+              {props.alt}
+            </div>
+          )}
+        </div>
+      );
+    },
+    blockquote: function Quote(props) {
+      return (
+        <blockquote className="border-l-2 border-gray-500 pl-5" {...props} />
+      );
     },
     PostDate,
     CodeCaption,
