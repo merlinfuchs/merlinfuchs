@@ -48,7 +48,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     ul: function Ul(props) {
-      return <ul className="pl-5 mb-6 list-disc" {...props} />;
+      return (
+        <ul
+          className="pl-5 mb-6 list-disc text-lg font-light space-y-2"
+          {...props}
+        />
+      );
     },
     ol: function Ul(props) {
       return <ul className="pl-5 mb-6 list-decimal" {...props} />;

@@ -1,7 +1,7 @@
 # Hi, I'm Merlin! 👋
 
-I'm a passionate software engineer from Germany who loves to tinker with new technologies.
-Right now I spent a lot of time working with React, TypeScript, and Go.
+I'm a passionate software engineer from Germany who loves to tinker with new and old technologies.
+Right now I spent a lot of time working with Go, React, and TypeScript.
 Every now and then I also like to take on a fight with the Rust compiler.
 
 Currently, I'm working as a part-time software engineer at [Friendly Captcha](https://friendlycaptcha.com),
