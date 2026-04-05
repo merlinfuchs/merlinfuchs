@@ -9,9 +9,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import CopyrightNotice from "./components/CopyrightNotice";
-import SwetrixAnalytics from "./components/SwetrixAnalytics";
 import "./styles/eostrix.css";
 import "./styles/globals.css";
+import AnalyticsProvider from "./components/AnalyticsProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +33,7 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <SwetrixAnalytics />
+        <AnalyticsProvider />
         <div className="max-w-4xl mx-auto my-12">
           <div className="flex mb-14 justify-between space-x-5">
             <Link
