@@ -1,7 +1,7 @@
 "use client";
 
-import Map from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import Map, { AttributionControl } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 export default function JournalMapBig({
   longitude,
@@ -16,15 +16,17 @@ export default function JournalMapBig({
     <div className="h-full w-full flex items-center justify-center">
       <div className="w-full bg-zinc-200 rounded-xl aspect-video">
         <Map
-          mapboxAccessToken="pk.eyJ1IjoibWVybGluZnVjaHMiLCJhIjoiY20wbXl3N3B0MDlqNzJtcXY0YWwydThidCJ9.X5NpPI1PEiOmNCGm7NQzrA"
           initialViewState={{
             longitude,
             latitude,
             zoom,
           }}
           style={{ width: "100%", height: "100%", borderRadius: "inherit" }}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-        />
+          mapStyle="https://tiles.stadiamaps.com/styles/alidade_bright.json"
+          attributionControl={false}
+        >
+          <AttributionControl compact />
+        </Map>
       </div>
     </div>
   );
