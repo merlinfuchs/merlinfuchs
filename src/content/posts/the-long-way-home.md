@@ -13,7 +13,7 @@ The commute is eleven kilometres and there is a version of it that takes twenty-
 version goes out along the river and comes back over one unnecessary hill, and I have never once
 arrived home and wished I had taken the short one.
 
-![photo — the river, the long way round](placeholder:3-2 "the unnecessary hill, on the way back")
+![a ginger cat walking the river path at dusk](/cats/river.svg#3-2 "the unnecessary hill, on the way back")
 
 ## What the long way is for
 

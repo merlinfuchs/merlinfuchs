@@ -30,7 +30,7 @@ func main() {
 > I do not think Go is the best language. I think it is the one where my 2am self and my
 > Tuesday-afternoon self write roughly the same code.
 
-![screenshot — the whole deploy, one file](placeholder:16-9 "scp, restart, go to bed")
+![a tuxedo cat parked in front of a terminal mid-deploy, refusing to move](/cats/terminal.svg#16-9 "scp, restart, go to bed")
 
 ## Where it stops
 

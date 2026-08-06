@@ -3,11 +3,13 @@
  * soft shadow, handwritten caption on the bottom lip.
  *
  *   ![the intercom, open](placeholder:3-2 "everything fits, barely")
- *   ![the intercom, open](/photos/intercom.jpg "everything fits, barely")
+ *   ![the intercom, open](/photos/intercom.jpg#3-2 "everything fits, barely")
  *
  * A `placeholder:<ratio>` source renders the striped placeholder box with the
  * alt text as its label. Any other source renders a real image in the same
- * frame, so swapping in photography is a one-line change per image.
+ * frame, so swapping in photography is a one-line change per image. Real
+ * sources take their frame ratio from a trailing `#<ratio>`, which is stripped
+ * before the image is emitted; without one they fall back to the default.
  *
  * Frame heights are all ≡ 10 (mod 30) so that a print — 10px margin, the image,
  * a 30px caption line and 10px margin — always totals a multiple of the post
@@ -47,8 +49,14 @@ const span = (className, value) =>
 
 function toPrint(img) {
   const { src = "", alt = "", title } = img.properties ?? {};
-  const isPlaceholder = String(src).startsWith(PLACEHOLDER);
-  const ratio = isPlaceholder ? String(src).slice(PLACEHOLDER.length) : DEFAULT_RATIO;
+  const raw = String(src);
+  const isPlaceholder = raw.startsWith(PLACEHOLDER);
+  const hash = raw.lastIndexOf("#");
+  const ratio = isPlaceholder
+    ? raw.slice(PLACEHOLDER.length)
+    : hash > -1
+      ? raw.slice(hash + 1)
+      : DEFAULT_RATIO;
   const [height, aspect] = FRAMES[ratio] ?? FRAMES[DEFAULT_RATIO];
   const width = Math.round(height * aspect) + FRAME_MARGIN;
 
@@ -57,7 +65,14 @@ function toPrint(img) {
     "print__image",
     isPlaceholder
       ? [span("print__label", alt), span("print__ratio", ratio.replace("-", " : "))]
-      : [{ type: "element", tagName: "img", properties: { src, alt }, children: [] }]
+      : [
+          {
+            type: "element",
+            tagName: "img",
+            properties: { src: hash > -1 ? raw.slice(0, hash) : raw, alt },
+            children: [],
+          },
+        ]
   );
 
   const print = [frame];

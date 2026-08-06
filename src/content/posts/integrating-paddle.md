@@ -24,7 +24,7 @@ being able to change a price without writing a paragraph explaining it.
 
 > The migration itself was two weekends. Deciding to do it took eleven months.
 
-![screenshot — the first proper invoice](placeholder:3-2 "an invoice somebody's accountant will accept")
+![a cream cat sitting squarely on a freshly printed invoice](/cats/invoice.svg#3-2 "an invoice somebody's accountant will accept")
 
 ## The part that went wrong
 

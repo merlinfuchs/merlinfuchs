@@ -752,6 +752,11 @@ h3 {
   aspect-ratio: auto;
 }
 
+.intro__photo .print__image img {
+  height: 100%;
+  object-fit: cover;
+}
+
 .intro__photo .print__caption {
   font-size: 17px;
   padding-top: 6px;
@@ -1219,6 +1224,13 @@ h3 {
   font-size: 9px;
   color: #9a9484;
   text-align: center;
+  overflow: hidden;
+}
+
+.frame__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .frame__num {
@@ -1227,6 +1239,8 @@ h3 {
   bottom: 3px;
   font-size: 8px;
   color: #e0b45a;
+  /* The frames hold scans now, so the number needs to survive a light one. */
+  text-shadow: 0 1px 2px rgba(28, 26, 23, 0.9);
 }
 
 .contact-sheet__foot {
@@ -2368,6 +2382,13 @@ h3 {
   justify-content: center;
   font-size: 9px;
   color: #7d7566;
+  overflow: hidden;
+}
+
+.prop-photo__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .prop-film {

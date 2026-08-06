@@ -14,7 +14,7 @@ a thing you are maintaining. It rarely announces itself. One week you are adding
 because they are fun, and the next you are reading a bug report at two in the morning because
 somebody in another timezone depends on you.
 
-![screenshot — five years of one graph](placeholder:16-9 "the line that stopped being a hobby")
+![a tuxedo cat batting at the top end of a five-year graph line](/cats/graph.svg#16-9 "the line that stopped being a hobby")
 
 ## Nobody tells you about the second half
 

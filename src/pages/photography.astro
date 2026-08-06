@@ -36,7 +36,9 @@ const drawer = getDrawer("photography");
           {
             frames.map((frame) => (
               <div class="frame">
-                <div class="frame__img">{frame.label}</div>
+                <div class="frame__img">
+                  <img src={frame.src} alt={frame.label} />
+                </div>
                 <div class="frame__num">{frame.num}</div>
               </div>
             ))
@@ -66,9 +68,9 @@ const drawer = getDrawer("photography");
 
     <section style="--col:1 / span 5;--tilt:-1.8deg">
       <Print
-        label="large print — portrait"
+        src="/cats/studio-portrait.svg"
+        alt="a charcoal cat loafing under a studio light, eyes closed"
         ratio="4 / 5"
-        ratioLabel="4 : 5"
         caption="the one that came out right"
         padding="12px 12px 34px"
       />
@@ -77,7 +79,8 @@ const drawer = getDrawer("photography");
     <section class="stack" style="--col:6 / span 7;--stack-gap:20px">
       <div style="--item-tilt:1.4deg">
         <Print
-          label="wide print — a street, evening"
+          src="/cats/street-evening.svg"
+          alt="a tuxedo cat crossing a lamplit street in the evening"
           ratio="3 / 2"
           caption="pushed two stops, no regrets"
           padding="10px 10px 28px"

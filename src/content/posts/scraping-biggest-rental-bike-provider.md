@@ -27,7 +27,7 @@ curl -s "$ENDPOINT" | jq '.bikes[] | {id, lat, lng}' >> snapshots.ndjson
 A cron job, a Postgres table, and roughly four hundred megabytes later, some things were
 obvious.
 
-![map — every bike, one Tuesday](placeholder:5-4 "the whole city, at 08:40")
+![a city map with cat-head pins dropped across it](/cats/city-map.svg#5-4 "the whole city, at 08:40")
 
 - Bikes drift downhill across a day, and get driven back up overnight
 - Three stations are effectively a car park for the rebalancing van

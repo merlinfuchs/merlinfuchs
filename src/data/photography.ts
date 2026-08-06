@@ -6,23 +6,24 @@ export const roll = {
 };
 
 const captions = [
-  "street, morning",
-  "workshop bench",
-  "bike, leaning",
-  "a door",
-  "friends, blurred",
-  "window light",
-  "train window",
-  "the printer",
-  "rain on glass",
-  "empty square",
-  "hands, soldering",
-  "last frame",
+  "the doorstep regular",
+  "loaf, morning light",
+  "off somewhere",
+  "one eye open",
+  "the radiator",
+  "warm brick",
+  "crossing",
+  "waiting for the tin",
+  "the good chair",
+  "eye contact",
+  "thoroughly unimpressed",
+  "last frame, asleep",
 ];
 
 export const frames = captions.map((label, i) => ({
   label,
   num: `${String(i + 1).padStart(2, "0")}A`,
+  src: `/cats/roll-${String(i + 1).padStart(2, "0")}.svg`,
 }));
 
 export const developingLog = [

@@ -13,7 +13,7 @@ The Universum DWA 101 cost fifteen euros and arrived smelling like a cupboard. I
 buttons, one red LED and a speaker that was never designed to be driven by anything with a
 computer in it. That turned out to be the whole project.
 
-![photo — the intercom, before](placeholder:3-2 "fifteen euros, plus postage")
+![a ginger cat peering out through the front of the old intercom](/cats/intercom.svg#3-2 "fifteen euros, plus postage")
 
 ## What went in
 
@@ -34,7 +34,7 @@ less than a takeaway.
 The buttons pick a personality. Depressed, supporter, critic — and a debate mode where the last
 two argue with each other about whatever you say into the microphone and never resolve anything.
 
-![photo — the case, open on the bench](placeholder:4-3 "everything fits, barely")
+![a cream cat asleep in the open case on the bench, curled around the board](/cats/bench.svg#4-3 "everything fits, barely")
 
 The LED colour tells you which one is currently talking, which matters more than it sounds
 when you have walked out of the room and left them going.

@@ -13,7 +13,7 @@ The camera does not show you anything. That is the entire feature. You press the
 mechanism makes a sound that is very slightly too loud, and then you carry on walking with no
 idea whether you got it.
 
-![print — frame 12, the one that worked](placeholder:4-5 "worth the other thirty-five")
+![a grey cat sitting in window light, looking straight down the lens](/cats/portrait.svg#4-5 "worth the other thirty-five")
 
 ## The limit does the work
 
@@ -27,7 +27,7 @@ and the choosing is the part I actually enjoy.
 
 > Digital gives you every frame you took. Film gives you the ones you meant.
 
-![photo — the contact sheet, still wet](placeholder:3-2 "thirty-six decisions, all at once")
+![a contact sheet of six cat portraits, still wet](/cats/contact-sheet.svg#3-2 "thirty-six decisions, all at once")
 
 ## The evening at the scanner
 

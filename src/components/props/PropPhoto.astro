@@ -2,6 +2,7 @@
 /** A loose photo print lying in the page margin. */
 
 interface Props {
+  /** Shown only while the frame is still empty. */
   label: string;
   /** Absolute placement inside the prop layer, e.g. "left:184px;top:250px". */
   at: string;
@@ -10,11 +11,14 @@ interface Props {
   tilt: string;
   /** White margin around the frame. */
   padding?: string;
+  src?: string;
 }
 
-const { label, at, width, height, tilt, padding = "9px 9px 30px" } = Astro.props;
+const { label, at, width, height, tilt, padding = "9px 9px 30px", src } = Astro.props;
 ---
 
 <div class="prop-photo" style={`${at};width:${width};padding:${padding};--tilt:${tilt}`}>
-  <div class="prop-photo__img" style={`height:${height}`}>{label}</div>
+  <div class="prop-photo__img" style={`height:${height}`}>
+    {src ? <img src={src} alt="" /> : label}
+  </div>
 </div>
