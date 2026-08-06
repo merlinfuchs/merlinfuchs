@@ -2,10 +2,14 @@
 Description=Check for a new branch to preview every thirty seconds
 
 [Timer]
-OnBootSec=30s
-# This is the one you sit and wait for, so poll it more often than live.
-OnUnitActiveSec=30s
-AccuracySec=5s
+OnBootSec=20s
+# This is the one you sit and wait for. A no-change tick is one container start
+# and one git fetch, so 15s is cheap — but it is still ~5.7k requests a day to
+# GitHub for a repo that changes a few times a week. Going below this spends
+# requests on latency that is dominated by build and agent time anyway; if you
+# want it instant, trigger the unit directly or add a webhook.
+OnUnitActiveSec=15s
+AccuracySec=2s
 Persistent=true
 
 [Install]

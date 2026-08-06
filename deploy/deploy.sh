@@ -62,7 +62,9 @@ if [ ! -d "$checkout/.git" ]; then
   git clone --quiet "$REPO_URL" "$checkout"
 fi
 
-git -C "$checkout" fetch --quiet --prune origin
+# sync.sh sets SKIP_FETCH after fetching this same checkout to resolve the ref,
+# so a no-change tick costs one round trip to GitHub instead of two.
+[ "${SKIP_FETCH:-}" = "1" ] || git -C "$checkout" fetch --quiet --prune origin
 
 if ! sha=$(git -C "$checkout" rev-parse --verify --quiet "origin/$ref^{commit}"); then
   log "ref 'origin/$ref' not found — nothing to do"

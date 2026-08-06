@@ -55,6 +55,8 @@ resolve_preview_ref() {
     # LIVE_BRANCH rather than handing deploy.sh an empty ref.
     if { [ -d "$dir/.git" ] || git clone --quiet "$REPO_URL" "$dir"; } &&
       git -C "$dir" fetch --quiet --prune origin; then
+      # deploy.sh is about to use this checkout; it doesn't need to fetch again.
+      export SKIP_FETCH=1
       ref=$(git -C "$dir" for-each-ref \
         --sort=-committerdate --format='%(refname:short)' \
         --no-merged "origin/$LIVE_BRANCH" refs/remotes/origin 2>/dev/null |

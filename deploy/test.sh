@@ -53,12 +53,16 @@ EOF
   )
 }
 
-# Change what the build writes, and commit it.
+# Change what the build writes, and commit it. Rewrites the file rather than
+# patching it, so it also repairs a fixture an earlier test deliberately broke.
 set_marker() {
   local dir=$1 marker=$2
   (
     cd "$dir"
-    sed -i "s/echo [a-zA-Z0-9-]* >/echo $marker >/" package.json
+    cat >package.json <<EOF
+{ "name": "fixture", "version": "1.0.0", "private": true,
+  "scripts": { "build": "mkdir -p dist && echo $marker > dist/index.html" } }
+EOF
     git commit -qam "$marker"
   )
 }
@@ -127,6 +131,21 @@ release=$(readlink "$SITE_ROOT/current-live")
 [ "$(stat -c %a "$release")" = 755 ] || fail "release dir is $(stat -c %a "$release"), not world-readable"
 [ "$(stat -c %a "$release/index.html")" = 644 ] || fail "page is $(stat -c %a "$release/index.html")"
 pass "releases are readable by the user serving them"
+
+# SKIP_FETCH is how sync.sh avoids a second round trip per tick. If it silently
+# did nothing, every tick would cost double — so prove it actually skips.
+# main is still on the deliberately broken commit here; repair it first.
+(cd /work/repo && git checkout -q main)
+set_marker /work/repo v3
+./deploy.sh live main >/dev/null
+[ "$(cat "$SITE_ROOT/current-live/index.html")" = v3 ] || fail "could not restore main"
+
+set_marker /work/repo v4
+SKIP_FETCH=1 ./deploy.sh live main >/dev/null
+[ "$(cat "$SITE_ROOT/current-live/index.html")" = v3 ] || fail "SKIP_FETCH still fetched"
+./deploy.sh live main >/dev/null
+[ "$(cat "$SITE_ROOT/current-live/index.html")" = v4 ] || fail "no fetch without SKIP_FETCH"
+pass "SKIP_FETCH suppresses the fetch, and only that"
 
 # ------------------------------------------------------------------ sync.sh --
 
