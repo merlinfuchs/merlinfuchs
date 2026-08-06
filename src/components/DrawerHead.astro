@@ -1,0 +1,19 @@
+---
+import type { Drawer } from "../data/drawers";
+
+interface Props {
+  drawer: Drawer;
+}
+
+const { drawer } = Astro.props;
+---
+
+<div class="drawer-head" style="--col:1 / -1;--tilt:-.4deg">
+  <div class="folder-tab" style={`--tab-bg:${drawer.color};--tab-fg:${drawer.label}`}>
+    {drawer.tab}
+  </div>
+  <div class="drawer-head__body">
+    <h1>{drawer.name}</h1>
+    <p><slot>{drawer.intro}</slot></p>
+  </div>
+</div>

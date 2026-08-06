@@ -1,11 +1,130 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import DrawerCard from "../components/DrawerCard.astro";
+import NightCard from "../components/NightCard.astro";
+import NowPad from "../components/NowPad.astro";
+import Print from "../components/Print.astro";
+import Receipt from "../components/Receipt.astro";
+import SectionHead from "../components/SectionHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import HomeProps from "../components/props/HomeProps.astro";
+import Layout from "../layouts/Layout.astro";
+import { drawers } from "../data/drawers";
+import { getCategory } from "../data/categories";
+import { getPosts, postHref } from "../data/posts";
+import { elsewhere, site } from "../data/site";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+/** The receipt shows the four most recent posts, whatever drawer they came from. */
+const latestPosts = (await getPosts()).slice(0, 4);
+
+/** Column and tilt for each drawer card, in the 2×2 block. */
+const cardLayout = [
+  { col: "1 / span 6", tilt: "-.9deg" },
+  { col: "7 / span 6", tilt: "1.1deg" },
+  { col: "1 / span 6", tilt: "1.2deg" },
+  { col: "7 / span 6", tilt: "-1deg" },
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="merlin's desk"
+  description="Merlin Fuchs — a desk with four drawers: software, photography, tinkering and sundries."
+  padding="56px 28px 96px"
+  propsInset="-30px -300px"
+>
+  <HomeProps />
+
+  <header class="masthead">
+    <div class="tilt" style="--tilt:-1.2deg">
+      <div class="wordmark">merlin's<em> desk</em></div>
+      <div class="tagline">{site.tagline}</div>
+    </div>
+
+    <div class="masthead__aside">
+      <div class="badge">{site.badge}</div>
+      <a class="mail-btn" href={`mailto:${site.email}`}>✉ {site.emailLabel}</a>
+    </div>
+  </header>
+
+  <div class="grid" style="--grid-gap:38px 28px">
+    <!-- Who I am -->
+    <section style="--col:1 / span 8;--tilt:-.7deg">
+      <div class="tape"></div>
+      <div class="card card--intro">
+        <div class="intro">
+          <Print
+            class="intro__photo"
+            label="a photo of me"
+            ratioLabel="100 x 100"
+            caption="hi 👋"
+          />
+          <div>
+            <h1>Hi, I'm Merlin!</h1>
+            <p>
+              Software engineer from Germany. I make things for a living and then, apparently for
+              fun, I go home and make more things — printed, soldered, photographed or ridden.
+            </p>
+            <p>
+              Part-time I build <a href="https://friendlycaptcha.com">Friendly Captcha</a>, a privacy
+              and accessibility focused alternative to reCAPTCHA. The rest lives in the drawers
+              below.
+            </p>
+            <p>Pick whichever drawer interests you — nobody has to care about all four.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What I'm doing now -->
+    <section style="--col:9 / span 4;--tilt:1.5deg">
+      <NowPad />
+    </section>
+
+    <div style="--col:1 / -1">
+      <SectionHead title="the four drawers" note="pick one" margin="18px 0 4px" />
+    </div>
+
+    {
+      drawers.map((drawer, i) => (
+        <DrawerCard drawer={drawer} col={cardLayout[i].col} tilt={cardLayout[i].tilt} />
+      ))
+    }
+
+    <!-- Latest posts -->
+    <section style="--col:1 / span 7;--tilt:.8deg">
+      <Receipt
+        class="receipt--home"
+        title="LATEST FROM EVERY DRAWER"
+        sub="merlinfuchs.com/posts · no paywall, no popup"
+        rows={latestPosts.map((post) => ({
+          label: post.data.title,
+          href: postHref(post),
+          meta: getCategory(post.data.category).name,
+        }))}
+        footLink={{ label: "read the rest »", href: site.postsUrl }}
+        footNote={`TOTAL: ${latestPosts.length} SHOWN`}
+      />
+    </section>
+
+    <section class="stretch" style="--col:8 / span 5;--tilt:-1.4deg">
+      <NightCard
+        class="night-card--home"
+        title="not sure where to start?"
+        body="The writing cuts across all four drawers — essays, build logs and the occasional business post."
+        cta={{ label: "read the archive →", href: site.postsUrl }}
+      />
+    </section>
+
+    <!-- Links out -->
+    <section class="elsewhere" style="--col:1 / -1;--tilt:.4deg">
+      <div class="elsewhere__head">
+        <div class="hand">elsewhere on the internet</div>
+        <span>no newsletter, no cookies</span>
+      </div>
+      <div class="elsewhere__links">
+        {elsewhere.map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+    </section>
+  </div>
+
+  <SiteFooter marginTop="44px" />
 </Layout>

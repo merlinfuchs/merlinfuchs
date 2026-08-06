@@ -1,0 +1,20 @@
+---
+/** Yellow sticky note with a handwritten title and a short list. */
+
+interface Props {
+  title: string;
+  items: string[];
+  /** Small uppercase line under the dashed rule. */
+  foot?: string;
+}
+
+const { title, items, foot } = Astro.props;
+---
+
+<div class="sticky">
+  <div class="sticky__title">{title}</div>
+  <div class="sticky__list">
+    {items.map((item) => <div>{item}</div>)}
+  </div>
+  {foot && <div class="sticky__foot">{foot}</div>}
+</div>

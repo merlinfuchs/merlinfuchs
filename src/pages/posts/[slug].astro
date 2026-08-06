@@ -1,0 +1,171 @@
+---
+import { render } from "astro:content";
+import ListCard from "../../components/ListCard.astro";
+import NightCard from "../../components/NightCard.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import WritingProps from "../../components/props/WritingProps.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getCategory } from "../../data/categories";
+import { site } from "../../data/site";
+import {
+  formatDate,
+  getPosts,
+  postHref,
+  readingTime,
+  wordCount,
+  type Post,
+} from "../../data/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      // Posts are newest-first, so "next" is the older one.
+      newer: posts[i - 1] ?? null,
+      older: posts[i + 1] ?? null,
+      // Counting up from the oldest, the way a notebook would.
+      number: posts.length - i,
+    },
+  }));
+}
+
+interface Props {
+  post: Post;
+  newer: Post | null;
+  older: Post | null;
+  number: number;
+}
+
+const { post, newer, older, number } = Astro.props;
+const { Content } = await render(post);
+
+const category = getCategory(post.data.category);
+const posts = await getPosts();
+
+/** Other posts from the same drawer, then anything recent to fill the gaps. */
+const related = [
+  ...posts.filter((p) => p.id !== post.id && p.data.category === post.data.category),
+  ...posts.filter((p) => p.id !== post.id && p.data.category !== post.data.category),
+].slice(0, 3);
+---
+
+<Layout title={`${post.data.title} — merlin's desk`} description={post.data.description}>
+  <div class="drawer-nav">
+    <a class="paper-btn tilt" style="--tilt:-1.4deg" href="/posts">← back to the archive</a>
+
+    <div class="drawer-nav__links">
+      <span>post № {number} of {posts.length}</span>
+    </div>
+  </div>
+
+  <WritingProps />
+
+  <div class="grid">
+    <div class="drawer-head post-head" style="--col:1 / -1;--tilt:-.4deg">
+      <div class="post-head__stamp">
+        <a
+          class="post-stamp"
+          style={`--stamp-bg:${category.color};--stamp-fg:${category.label}`}
+          href={category.href ?? "/posts"}
+        >
+          FILED UNDER {category.name.toUpperCase()}
+        </a>
+      </div>
+
+      <div class="drawer-head__body">
+        <h1>{post.data.title}</h1>
+        <p>{post.data.description}</p>
+        <div class="post-head__meta">
+          <span>{formatDate(post.data.date)}</span>
+          <span>·</span>
+          <span>{readingTime(post)} MIN READ</span>
+          <span>·</span>
+          <span>{wordCount(post)} WORDS</span>
+        </div>
+      </div>
+    </div>
+
+    <article class="card post-body" style="--col:1 / span 8;--tilt:-.3deg">
+      <Content />
+    </article>
+
+    <section class="stack" style="--col:9 / span 4">
+      <div class="fact-card" style="--item-tilt:1.3deg">
+        <div class="fact-card__head"><span>THIS POST</span><span>№ {number}</span></div>
+        <div class="fact-card__rows">
+          <div class="fact-card__row"><span>published</span><span>{formatDate(post.data.date)}</span></div>
+          <div class="fact-card__row"><span>filed under</span><span>{category.name}</span></div>
+          <div class="fact-card__row"><span>reading time</span><span>{readingTime(post)} min</span></div>
+          <div class="fact-card__row"><span>words</span><span>{wordCount(post)}</span></div>
+        </div>
+      </div>
+
+      {
+        post.data.aside && (
+          <div class="sticky" style="--item-tilt:-1.6deg">
+            <div class="sticky__title">{post.data.aside}</div>
+            <div class="sticky__foot">A NOTE IN THE MARGIN</div>
+          </div>
+        )
+      }
+
+      <div style="--item-tilt:1deg">
+        <ListCard
+          title="more from the pile"
+          rows={related.map((p) => ({
+            title: p.data.title,
+            href: postHref(p),
+            category: getCategory(p.data.category).name,
+          }))}
+        />
+      </div>
+
+      <div style="--item-tilt:-1.2deg">
+        <NightCard
+          title="found a mistake?"
+          body="Very likely. Tell me and I'll fix it — corrections are the best kind of email."
+          cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+        />
+      </div>
+    </section>
+
+    <nav class="prev-next" style="--col:1 / -1" aria-label="Other posts">
+      {
+        newer ? (
+          <a
+            class="prev-next__card"
+            style={`--card-bg:${getCategory(newer.data.category).color};--label-fg:${getCategory(newer.data.category).label};--tilt:-1deg`}
+            href={postHref(newer)}
+          >
+            <div class="post-nav__label">← NEWER</div>
+            <div class="post-nav__title">{newer.data.title}</div>
+          </a>
+        ) : (
+          <div class="post-nav__empty">this is the newest one</div>
+        )
+      }
+
+      {
+        older ? (
+          <a
+            class="prev-next__card"
+            style={`--card-bg:${getCategory(older.data.category).color};--label-fg:${getCategory(older.data.category).label};--tilt:1.2deg;text-align:right`}
+            href={postHref(older)}
+          >
+            <div class="post-nav__label">OLDER →</div>
+            <div class="post-nav__title">{older.data.title}</div>
+          </a>
+        ) : (
+          <div class="post-nav__empty" style="justify-content:flex-end">
+            that's the last one
+          </div>
+        )
+      }
+    </nav>
+  </div>
+
+  <SiteFooter phrase="written, rewritten and posted by hand" />
+</Layout>

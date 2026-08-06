@@ -1,0 +1,30 @@
+---
+/** One post as an index card, tabbed in the colour of its drawer. */
+import { getCategory } from "../data/categories";
+import { formatDate, postHref, readingTime, type Post } from "../data/posts";
+
+interface Props {
+  post: Post;
+  col?: string;
+  tilt?: string;
+}
+
+const { post, col = "1 / span 6", tilt = "0deg" } = Astro.props;
+const category = getCategory(post.data.category);
+---
+
+<a
+  class="post-card"
+  href={postHref(post)}
+  style={`--col:${col};--tilt:${tilt};--cat-bg:${category.color}`}
+>
+  <div class="post-card__tab"></div>
+  <div class="post-card__body">
+    <div class="post-card__date">{formatDate(post.data.date)}</div>
+    <div class="post-card__title">{post.data.title}</div>
+    <p>{post.data.description}</p>
+    <div class="post-card__foot">
+      <span>{category.name.toUpperCase()} · {readingTime(post)} MIN</span><b>READ →</b>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,134 @@
+---
+import NightCard from "../../components/NightCard.astro";
+import PostCard from "../../components/PostCard.astro";
+import SectionHead from "../../components/SectionHead.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import Sticky from "../../components/Sticky.astro";
+import WritingProps from "../../components/props/WritingProps.astro";
+import Layout from "../../layouts/Layout.astro";
+import { categories } from "../../data/categories";
+import { drawers } from "../../data/drawers";
+import { formatDate, getPosts, groupByYear, postHref, readingTime } from "../../data/posts";
+import { site } from "../../data/site";
+
+const posts = await getPosts();
+const [latest, ...rest] = posts;
+const years = groupByYear(rest);
+const latestCategory = categories[latest.data.category];
+
+/** How many posts came out of each drawer — the sticky note on the right. */
+const counts = drawers.map((drawer) => {
+  const n = posts.filter((post) => post.data.category === drawer.id).length;
+  return `· ${drawer.id} — ${n}`;
+});
+const businessCount = posts.filter((post) => post.data.category === "business").length;
+
+/** Alternating columns and tilts, so no two cards line up perfectly. */
+const layout = [
+  { col: "1 / span 6", tilt: "-.8deg" },
+  { col: "7 / span 6", tilt: "1.1deg" },
+  { col: "1 / span 6", tilt: "1deg" },
+  { col: "7 / span 6", tilt: "-1.1deg" },
+];
+---
+
+<Layout
+  title="Writing — merlin's desk"
+  description="Essays, build logs and the occasional business post, from all four drawers."
+>
+  <div class="drawer-nav">
+    <a class="paper-btn tilt" style="--tilt:-1.4deg" href="/">← back to the desk</a>
+
+    <div class="drawer-nav__links">
+      <span>{posts.length} posts · all four drawers</span>
+      {
+        drawers.map((drawer) => (
+          <a class="chip" style={`--chip-bg:${drawer.color}`} href={drawer.href}>
+            {drawer.id}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <WritingProps />
+
+  <div class="grid">
+    <div class="drawer-head" style="--col:1 / -1;--tilt:-.4deg">
+      <div class="folder-tab" style="--tab-bg:var(--paper-warm);--tab-fg:var(--ink-muted)">
+        THE ARCHIVE — WHATEVER GOT WRITTEN DOWN
+      </div>
+      <div class="drawer-head__body">
+        <h1>Writing</h1>
+        <p>
+          Essays, build logs and the occasional business post. The drawers keep the things; this
+          is where they get explained.
+        </p>
+      </div>
+    </div>
+
+    <!-- Newest post, given the full page-width treatment -->
+    <section style="--col:1 / span 8;--tilt:-.6deg">
+      <div class="tape"></div>
+      <article class="card card--ruled featured">
+        <div class="featured__meta">
+          <span>NEWEST</span>
+          <span>{formatDate(latest.data.date)}</span>
+          <span class="cat-tag" style={`--cat-bg:${latestCategory.color}`}>
+            {latest.data.kind ?? latestCategory.name}
+          </span>
+          <span>{readingTime(latest)} MIN</span>
+        </div>
+        <h2 class="featured__title">{latest.data.title}</h2>
+        <p>{latest.data.description}</p>
+        <div class="btn-row">
+          <a class="ink-btn" href={postHref(latest)}>read it →</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="stack" style="--col:9 / span 4;--tilt:1.4deg">
+      <Sticky
+        title="what's in here"
+        items={[...counts, `· business — ${businessCount}`]}
+        foot="FILED BY DRAWER, NOT BY DATE"
+      />
+
+      <NightCard
+        title="no newsletter"
+        body="Nothing to subscribe to. If you want to know when something lands, the feed or an email both work."
+        cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+      />
+    </section>
+
+    {
+      years.map(({ year, posts: yearPosts }) => (
+        <>
+          <div style="--col:1 / -1">
+            <SectionHead
+              title={String(year)}
+              note={`${yearPosts.length} ${yearPosts.length === 1 ? "post" : "posts"}`}
+            />
+          </div>
+
+          {yearPosts.map((post, i) => (
+            <PostCard post={post} col={layout[i % 4].col} tilt={layout[i % 4].tilt} />
+          ))}
+        </>
+      ))
+    }
+
+    <section class="elsewhere" style="--col:1 / -1;--tilt:.4deg">
+      <div class="elsewhere__head">
+        <div class="hand">that's everything so far</div>
+        <span>no paywall, no popup</span>
+      </div>
+      <div class="elsewhere__links">
+        {drawers.map((drawer) => <a href={drawer.href}>back to {drawer.id}</a>)}
+        <a href="/">the desk</a>
+      </div>
+    </section>
+  </div>
+
+  <SiteFooter phrase="written, rewritten and posted by hand" />
+</Layout>

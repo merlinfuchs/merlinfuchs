@@ -1,0 +1,18 @@
+---
+/** Dark film strip with sprocket holes — a loose object on the desk. */
+
+interface Props {
+  frames?: number;
+  class?: string;
+}
+
+const { frames = 3, class: className } = Astro.props;
+---
+
+<div class:list={["filmstrip", className]}>
+  <div class="filmstrip__perf"></div>
+  <div class="filmstrip__frames">
+    {Array.from({ length: frames }, () => <div />)}
+  </div>
+  <div class="filmstrip__perf"></div>
+</div>

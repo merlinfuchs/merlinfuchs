@@ -1,0 +1,88 @@
+---
+/**
+ * The bike, as a line drawing on graph paper — annotated like a workshop
+ * sketch. Strokes inherit `currentColor`, so it takes the ink colour.
+ *
+ * This is the one piece of real artwork on the site. Everything else that
+ * looks like an image is either a striped placeholder or a photo.
+ */
+
+interface Props {
+  head?: string;
+  meta?: string;
+  caption?: string;
+}
+
+const {
+  head = "THE BIKE",
+  meta = "STEEL · 1998 · NOT FAST",
+  caption = "still the best thing I own",
+} = Astro.props;
+
+/**
+ * Callouts, positioned over the drawing as a fraction of its box. The viewBox
+ * carries an empty band above the bike so the top two never cover the frame.
+ */
+const notes = [
+  { text: "the creak — somewhere here", x: "4%", y: "0%" },
+  { text: "bar tape: past saving", x: "58%", y: "0%" },
+  { text: "chain: due 200 km ago", x: "33%", y: "86%" },
+];
+---
+
+<div class="bike-card">
+  <div class="card-meta"><span>{head}</span><span>{meta}</span></div>
+
+  <div class="bike">
+    <svg viewBox="0 -32 320 242" role="img" aria-label="Line drawing of a road bike">
+      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+        <!-- wheels -->
+        <circle cx="70" cy="150" r="45"></circle>
+        <circle cx="255" cy="150" r="45"></circle>
+
+        <!-- spokes -->
+        <g stroke-width="0.9" opacity="0.45">
+          <path d="M70 109V191M29 150H111M41 121l58 58M99 121l-58 58"></path>
+          <path d="M255 109v82M214 150h82M226 121l58 58M284 121l-58 58"></path>
+        </g>
+
+        <!-- frame -->
+        <path d="M70 150H135"></path>
+        <path d="M70 150l40-82"></path>
+        <path d="M135 150l-25-82"></path>
+        <path d="M135 150l93-58"></path>
+        <path d="M110 68l105-6"></path>
+        <path d="M215 62l13 30"></path>
+        <path d="M228 92l27 58"></path>
+
+        <!-- saddle, bars, cranks -->
+        <path d="M110 68v-6"></path>
+        <path d="M96 62h30"></path>
+        <path d="M215 62l21-5"></path>
+        <path d="M236 57q10 2 8 12 -2 8 -10 9"></path>
+        <circle cx="135" cy="150" r="11"></circle>
+        <path d="M135 150l17 20"></path>
+
+        <!-- chain -->
+        <g stroke-width="1.1">
+          <path d="M146 146H73"></path>
+          <path d="M144 157H72"></path>
+        </g>
+
+        <!-- hubs -->
+        <circle cx="70" cy="150" r="3.5" fill="currentColor" stroke="none"></circle>
+        <circle cx="255" cy="150" r="3.5" fill="currentColor" stroke="none"></circle>
+      </g>
+    </svg>
+
+    {
+      notes.map((note) => (
+        <span class="bike__note" style={`--x:${note.x};--y:${note.y}`}>
+          {note.text}
+        </span>
+      ))
+    }
+  </div>
+
+  {caption && <div class="bike-card__caption">{caption}</div>}
+</div>

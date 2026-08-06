@@ -1,0 +1,45 @@
+---
+/** Loose paper around the writing pages: drafts, a note, a coffee ring. */
+import PropSlip from "./PropSlip.astro";
+---
+
+<div class="props" aria-hidden="true">
+  <!-- A page of a draft, face down. -->
+  <div class="prop-paper" style="left:170px;top:340px;width:230px;--prop-bg:var(--paper);--tilt:-5deg">
+    <div class="prop-lines">
+      <div></div>
+      <div></div>
+      <div style="width:82%"></div>
+      <div></div>
+      <div></div>
+      <div style="width:64%"></div>
+    </div>
+  </div>
+
+  <div class="prop-ring" style="right:150px;top:585px;width:120px;height:120px;--tilt:0deg"></div>
+
+  <div class="prop-sticky" style="right:158px;top:700px;width:210px;--tilt:4deg">
+    <div class="hand">write it down<br />or lose it</div>
+  </div>
+
+  <PropSlip
+    head="DRAFTS"
+    meta="11 UNFINISHED"
+    note="one of them since 2023"
+    at="left:150px;top:1010px"
+    width="240px"
+    tilt="3deg"
+  />
+
+  <div
+    class="prop-paper"
+    style="right:160px;top:1240px;width:224px;--prop-bg:var(--paper-warm);--tilt:-3deg"
+  >
+    <div class="prop-paper__label">NOTEBOOK № 6 · INDEX</div>
+    <div class="prop-lines" style="padding-top:10px">
+      <div></div>
+      <div style="width:70%"></div>
+      <div></div>
+    </div>
+  </div>
+</div>

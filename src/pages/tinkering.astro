@@ -1,0 +1,142 @@
+---
+import DrawerHead from "../components/DrawerHead.astro";
+import DrawerNav from "../components/DrawerNav.astro";
+import NightCard from "../components/NightCard.astro";
+import PrevNext from "../components/PrevNext.astro";
+import Receipt from "../components/Receipt.astro";
+import SectionHead from "../components/SectionHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Sticky from "../components/Sticky.astro";
+import TinkeringProps from "../components/props/TinkeringProps.astro";
+import Layout from "../layouts/Layout.astro";
+import { getDrawer } from "../data/drawers";
+import { failureLog, onTheBench, partsBin, printSettings } from "../data/tinkering";
+import { site } from "../data/site";
+
+const drawer = getDrawer("tinkering");
+---
+
+<Layout title="Tinkering — merlin's desk" description={drawer.blurb}>
+  <DrawerNav current="tinkering" />
+  <TinkeringProps />
+
+  <div class="grid">
+    <DrawerHead drawer={drawer} />
+
+    <!-- The current build -->
+    <section style="--col:1 / span 7;--tilt:.5deg">
+      <article class="card card--graph build-log">
+        <div class="build-log__head">
+          <div class="build-log__title">AI in a Box</div>
+          <span class="build-log__meta">BUILD LOG № 07 · JAN 2026</span>
+        </div>
+
+        <figure class="build-log__photo">
+          <img src="https://merlin.gg/ai-in-a-box.webp" alt="Old intercom with an AI assistant inside" />
+          <figcaption class="print__caption">a 1980s intercom, quietly possessed</figcaption>
+        </figure>
+
+        <p>
+          A 15€ Universum DWA 101 from eBay, a Raspberry Pi 4, a USB microphone and a speaker that
+          should really have been an amplifier. Three push buttons glued under the original intercom
+          keys, and the red LED swapped for RGB so it can show which personality is currently
+          talking.
+        </p>
+        <p>
+          Four modes, none of them useful: depressed, supporter, critic, and a debate mode where the
+          last two argue with each other about whatever you bring up.
+        </p>
+
+        <div class="btn-row">
+          <a class="ink-btn" href="/posts/ai-in-a-box">read the full build log</a>
+          <a class="outline-btn" href="https://github.com/merlinfuchs/ai-in-a-box">source code</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      <div style="--item-tilt:-1.6deg">
+        <Sticky title="on the bench" items={onTheBench} foot="SWAP FOR YOUR REAL SETUP" />
+      </div>
+
+      <div class="spec" style="--item-tilt:1.3deg">
+        <div class="spec__head"><span>PRINT SETTINGS</span><span>LAST GOOD ONE</span></div>
+        <div class="spec__rows">
+          {
+            printSettings.map((row) => (
+              <div class="spec__row">
+                <span>{row.key}</span>
+                <span>{row.value}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="bin" style="--item-tilt:-1deg">
+        <div class="bin__title">PARTS BIN</div>
+        <div class="bin__tags">{partsBin.map((part) => <span>{part}</span>)}</div>
+      </div>
+    </section>
+
+    <div style="--col:1 / -1">
+      <SectionHead title="other things on the bench" note="finished, mostly" />
+    </div>
+
+    <section style="--col:1 / span 4;--tilt:-1.2deg">
+      <article class="card card--tab mini-card">
+        <div class="print__image" style="--ratio:4 / 3">
+          <span class="print__label">photo — intercom mount</span>
+          <span class="print__ratio">4 : 3</span>
+        </div>
+        <div class="mini-card__title">Intercom mount</div>
+        <p>Printed bracket so the whole thing hangs on a wall like the original was supposed to.</p>
+        <span class="hand">third revision, first good one</span>
+      </article>
+    </section>
+
+    <section style="--col:5 / span 4;--tilt:1.5deg">
+      <article class="card card--tab mini-card">
+        <div class="print__image" style="--ratio:4 / 3">
+          <span class="print__label">photo — the old Macintosh</span>
+          <span class="print__ratio">4 : 3</span>
+        </div>
+        <div class="mini-card__title">Blimp</div>
+        <p>
+          An old Macintosh given something new to do. <a
+            href="https://github.com/merlinfuchs/blimp">Code here</a
+          >.
+        </p>
+        <span class="hand">the one that started it</span>
+      </article>
+    </section>
+
+    <section style="--col:9 / span 4;--tilt:-.8deg">
+      <div class="slot-card">
+        <div class="hand">the next one</div>
+        <p>Empty slot on purpose — whatever is currently half-soldered goes here.</p>
+        <span>IN PROGRESS</span>
+      </div>
+    </section>
+
+    <section style="--col:1 / span 7;--tilt:.7deg">
+      <Receipt
+        title="FAILURE LOG"
+        sub="kept for morale purposes"
+        rows={failureLog.map((entry) => ({ label: entry.item, meta: entry.outcome }))}
+      />
+    </section>
+
+    <section style="--col:8 / span 5;--tilt:-1.5deg">
+      <NightCard
+        title="building the same thing?"
+        body="Happy to share files, settings and everything I got wrong first. Just ask."
+        cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+      />
+    </section>
+
+    <PrevNext current="tinkering" />
+  </div>
+
+  <SiteFooter phrase={drawer.footer} />
+</Layout>

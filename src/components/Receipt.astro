@@ -1,0 +1,48 @@
+---
+/** Paper slip with a torn bottom edge — used for post lists and logs. */
+
+interface Row {
+  label: string;
+  href?: string;
+  meta?: string;
+}
+
+interface Props {
+  title: string;
+  sub?: string;
+  rows: Row[];
+  footLink?: { label: string; href: string };
+  footNote?: string;
+  class?: string;
+}
+
+const { title, sub, rows, footLink, footNote, class: className } = Astro.props;
+const hasFoot = Boolean(footLink || footNote);
+---
+
+<div class:list={["receipt", className]}>
+  <div class="receipt__head">
+    <div class="receipt__title">{title}</div>
+    {sub && <div class="receipt__sub">{sub}</div>}
+  </div>
+
+  <div class="receipt__rows">
+    {
+      rows.map((row) => (
+        <div class="receipt__row">
+          {row.href ? <a href={row.href}>{row.label}</a> : <span>{row.label}</span>}
+          {row.meta && <span>{row.meta}</span>}
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    hasFoot && (
+      <div class="receipt__foot">
+        {footLink && <a href={footLink.href}>{footLink.label}</a>}
+        {footNote && <span>{footNote}</span>}
+      </div>
+    )
+  }
+</div>

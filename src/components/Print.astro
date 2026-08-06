@@ -1,0 +1,53 @@
+---
+/**
+ * A photo print: white margin, image (or striped placeholder) and an optional
+ * handwritten caption on the bottom lip. Replace `src` with real photography
+ * at the same aspect ratio.
+ */
+
+interface Props {
+  /** Placeholder text describing what belongs here. */
+  label?: string;
+  /** Aspect ratio, e.g. "4 / 5". */
+  ratio?: string;
+  /** Shown under the label as "4 : 3". */
+  ratioLabel?: string;
+  caption?: string;
+  src?: string;
+  alt?: string;
+  /** Overrides the white margin, e.g. "12px 12px 34px". */
+  padding?: string;
+  class?: string;
+}
+
+const {
+  label,
+  ratio = "4 / 3",
+  ratioLabel,
+  caption,
+  src,
+  alt = "",
+  padding,
+  class: className,
+} = Astro.props;
+
+const style = [padding && `--print-pad:${padding}`, `--ratio:${ratio}`]
+  .filter(Boolean)
+  .join(";");
+---
+
+<div class:list={["print", className]} style={style}>
+  <div class="print__image">
+    {
+      src ? (
+        <img src={src} alt={alt} />
+      ) : (
+        <>
+          {label && <span class="print__label">{label}</span>}
+          {ratioLabel && <span class="print__ratio">{ratioLabel}</span>}
+        </>
+      )
+    }
+  </div>
+  {caption && <div class="print__caption">{caption}</div>}
+</div>

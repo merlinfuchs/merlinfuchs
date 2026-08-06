@@ -1,0 +1,232 @@
+---
+/**
+ * "What I'm doing now" — a stack of paper sheets. Drag the top sheet with the
+ * mouse and it tears off; the button under the stack restacks them.
+ *
+ * The stack is fully server-rendered: without JS you still get the top sheet,
+ * and the tear control is simply inert.
+ */
+import { nowPad } from "../data/nowPad";
+
+const total = nowPad.length;
+---
+
+<div class="pad" data-now-pad>
+  <div class="pad__base"></div>
+
+  <div class="pad__bottom">
+    <div class="hand">that's the whole pad</div>
+    <button class="pad__restack" type="button" data-restack>↺ new pad, please</button>
+  </div>
+
+  {
+    nowPad.map((sheet, i) => {
+      const last = i === total - 1;
+      return (
+        <article
+          class="pad__sheet"
+          data-sheet={i}
+          data-depth={i}
+          data-last={last ? "" : undefined}
+          style={`--sheet-bg:${sheet.color};transform:translate(${i * 3}px,${i * 3}px) rotate(${(i * -0.8).toFixed(1)}deg);z-index:${total - i}`}
+        >
+          <div class="pad__title">{sheet.title}</div>
+          <div class="pad__lines">
+            {sheet.lines.map((line) => (
+              <div>{line}</div>
+            ))}
+          </div>
+          <div class="pad__foot">
+            <span>{sheet.date}</span>
+            <button class="pad__tear" type="button" data-tear disabled={last}>
+              {last ? "last sheet" : "drag me off ✂"}
+            </button>
+          </div>
+        </article>
+      );
+    })
+  }
+</div>
+
+<script>
+  /** Drag distance (px) past which the sheet tears off instead of springing back. */
+  const TEAR_THRESHOLD = 46;
+  /** Matches the fly-out transition in global.css, plus a little slack. */
+  const FLY_MS = 620;
+  /** Extra distance the torn sheet travels along the drag direction. */
+  const FLY_DISTANCE = 280;
+  /** Fallback direction when a sheet is torn by button rather than by drag. */
+  const DEFAULT_DIRECTION = { x: 70, y: -46 };
+
+  type Vec = { x: number; y: number };
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  class NowPad {
+    private sheets: HTMLElement[];
+    private count: number;
+    private torn = 0;
+    private tearing: number | null = null;
+    private tearFrom: Vec = DEFAULT_DIRECTION;
+    private flyStep = false;
+    private drag: { index: number; origin: Vec; offset: Vec } | null = null;
+    private flyTimer = 0;
+
+    constructor(private root: HTMLElement) {
+      this.sheets = Array.from(root.querySelectorAll<HTMLElement>("[data-sheet]"));
+      this.count = this.sheets.length;
+
+      this.sheets.forEach((sheet, index) => {
+        sheet.addEventListener("pointerdown", (event) => this.onPointerDown(event, index));
+        sheet
+          .querySelector<HTMLButtonElement>("[data-tear]")
+          ?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            if (this.depthOf(index) === 0) this.tear(index, DEFAULT_DIRECTION);
+          });
+      });
+
+      root.querySelector<HTMLButtonElement>("[data-restack]")?.addEventListener("click", () => {
+        this.restack();
+      });
+
+      window.addEventListener("pointermove", (event) => this.onPointerMove(event));
+      window.addEventListener("pointerup", () => this.onPointerUp());
+      window.addEventListener("pointercancel", () => this.onPointerUp());
+
+      this.render();
+    }
+
+    private depthOf(index: number) {
+      return index - this.torn;
+    }
+
+    /* --- dragging ------------------------------------------------------- */
+
+    private onPointerDown(event: PointerEvent, index: number) {
+      // Touch and pen keep their native scrolling; they tear via the button.
+      if (event.pointerType !== "mouse") return;
+      if (this.depthOf(index) !== 0) return;
+      if (this.sheets[index].hasAttribute("data-last")) return;
+      if ((event.target as HTMLElement).closest("a,button")) return;
+
+      this.drag = {
+        index,
+        origin: { x: event.clientX, y: event.clientY },
+        offset: { x: 0, y: 0 },
+      };
+      event.preventDefault();
+      this.render();
+    }
+
+    private onPointerMove(event: PointerEvent) {
+      if (!this.drag) return;
+      this.drag.offset = {
+        x: event.clientX - this.drag.origin.x,
+        y: event.clientY - this.drag.origin.y,
+      };
+      this.render();
+    }
+
+    private onPointerUp() {
+      if (!this.drag) return;
+      const { index, offset } = this.drag;
+      this.drag = null;
+
+      if (Math.hypot(offset.x, offset.y) > TEAR_THRESHOLD) this.tear(index, offset);
+      else this.render(); // springs back
+    }
+
+    /* --- tearing -------------------------------------------------------- */
+
+    private tear(index: number, direction: Vec) {
+      const from = direction.x || direction.y ? direction : DEFAULT_DIRECTION;
+      this.torn += 1;
+
+      if (reduceMotion.matches) {
+        this.tearing = null;
+        this.render();
+        return;
+      }
+
+      this.tearing = index;
+      this.tearFrom = from;
+      this.flyStep = false;
+      this.render();
+
+      // One frame at the drag position, then animate away from it.
+      requestAnimationFrame(() => {
+        if (this.tearing !== index) return;
+        this.flyStep = true;
+        this.render();
+      });
+
+      window.clearTimeout(this.flyTimer);
+      this.flyTimer = window.setTimeout(() => {
+        this.tearing = null;
+        this.flyStep = false;
+        this.render();
+      }, FLY_MS);
+    }
+
+    private restack() {
+      window.clearTimeout(this.flyTimer);
+      this.torn = 0;
+      this.tearing = null;
+      this.flyStep = false;
+      this.drag = null;
+      this.render();
+    }
+
+    /* --- rendering ------------------------------------------------------ */
+
+    private transformFor(index: number, depth: number, flying: boolean, dragging: boolean) {
+      if (flying) {
+        const f = this.tearFrom;
+        if (!this.flyStep) {
+          return `translate(${f.x}px,${f.y}px) rotate(${(f.x * 0.05).toFixed(2)}deg)`;
+        }
+        const len = Math.max(1, Math.hypot(f.x, f.y));
+        const x = f.x + (f.x / len) * FLY_DISTANCE;
+        const y = f.y + (f.y / len) * FLY_DISTANCE;
+        return `translate(${x.toFixed(0)}px,${y.toFixed(0)}px) rotate(${(f.x * 0.09).toFixed(1)}deg)`;
+      }
+
+      if (dragging && this.drag) {
+        const d = this.drag.offset;
+        return `translate(${d.x}px,${d.y}px) rotate(${(d.x * 0.05).toFixed(2)}deg)`;
+      }
+
+      return `translate(${depth * 3}px,${depth * 3}px) rotate(${depth * -0.8}deg)`;
+    }
+
+    private render() {
+      this.sheets.forEach((sheet, index) => {
+        const depth = this.depthOf(index);
+        const flying = this.tearing === index;
+
+        if (depth < 0 && !flying) {
+          sheet.hidden = true;
+          return;
+        }
+
+        const dragging = this.drag?.index === index && depth === 0;
+        sheet.hidden = false;
+        sheet.dataset.depth = String(depth);
+        sheet.style.transform = this.transformFor(index, depth, flying, dragging);
+        sheet.style.opacity = flying && this.flyStep ? "0" : "1";
+        sheet.style.zIndex = String(flying ? this.count + 2 : this.count - depth);
+
+        if (flying) sheet.dataset.flying = this.flyStep ? "fly" : "start";
+        else delete sheet.dataset.flying;
+
+        if (dragging) sheet.dataset.dragging = "";
+        else delete sheet.dataset.dragging;
+      });
+    }
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-now-pad]")
+    .forEach((pad) => new NowPad(pad));
+</script>

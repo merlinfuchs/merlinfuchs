@@ -1,0 +1,140 @@
+---
+import DrawerHead from "../components/DrawerHead.astro";
+import DrawerNav from "../components/DrawerNav.astro";
+import ListCard from "../components/ListCard.astro";
+import NightCard from "../components/NightCard.astro";
+import PrevNext from "../components/PrevNext.astro";
+import Print from "../components/Print.astro";
+import Receipt from "../components/Receipt.astro";
+import SectionHead from "../components/SectionHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Sticky from "../components/Sticky.astro";
+import SoftwareProps from "../components/props/SoftwareProps.astro";
+import Layout from "../layouts/Layout.astro";
+import { getDrawer } from "../data/drawers";
+import { openSource, projects, reachFor, writingSlugs } from "../data/software";
+import { getPostsBySlug, postHref } from "../data/posts";
+import { site } from "../data/site";
+
+const drawer = getDrawer("software");
+const writing = await getPostsBySlug(writingSlugs);
+---
+
+<Layout title="Software — merlin's desk" description={drawer.blurb}>
+  <DrawerNav current="software" />
+  <SoftwareProps />
+
+  <div class="grid">
+    <DrawerHead drawer={drawer}>
+      Mostly <b>Go</b>, <b>TypeScript</b> and <b>React</b>, mostly around <a
+        href="https://discord.com">Discord</a
+      > — two side projects that turned into a small business.
+    </DrawerHead>
+
+    <!-- What's running right now -->
+    <section style="--col:1 / span 8;--tilt:.5deg">
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="terminal__dot"></span>
+          <span class="terminal__dot"></span>
+          <span class="terminal__dot"></span>
+          <span class="terminal__path">~/projects — currently running</span>
+        </div>
+
+        <div class="terminal__body">
+          {
+            projects.map((project) => (
+              <article
+                class="project"
+                style={`--accent:${project.accent};--name-fg:${project.nameColor};--rule-fg:${project.ruleColor}`}
+              >
+                <a class="project__name" href={project.href}>
+                  {project.name}
+                </a>
+                <span class="project__tag">{project.tag}</span>
+                <p>{project.description}</p>
+              </article>
+            ))
+          }
+
+          <div class="terminal__foot">
+            <span>3 running · 1 in progress · 0 on fire (today)</span>
+            <a href={site.github}>all the code »</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" style="--col:9 / span 4;--tilt:-1.6deg">
+      <Sticky title="what I reach for" items={reachFor} foot="CORRECT THIS LIST — IT'S MY GUESS" />
+
+      <div class="note-card">
+        <div class="note-card__head"><span>THE DAY JOB</span><span>PART-TIME</span></div>
+        <a class="note-card__link" href="https://friendlycaptcha.com">Friendly Captcha</a>
+        <p>A privacy and accessibility focused alternative to reCAPTCHA. No puzzles, no tracking.</p>
+        <span class="hand">where I learn the most</span>
+      </div>
+    </section>
+
+    <div style="--col:1 / -1">
+      <SectionHead title="how it actually goes" note="less heroic than it sounds" />
+    </div>
+
+    <section style="--col:1 / span 7;--tilt:-.5deg">
+      <article class="card card--ruled">
+        <h2 class="essay__title">A side project that became a job</h2>
+        <p class="prose">
+          Xenon started as something I built for one server. Then it was on a few thousand. Then
+          people were relying on it at 2am and "a bot I maintain" had quietly become infrastructure —
+          with a premium tier, a support queue and a billing provider to migrate off.
+        </p>
+        <p class="prose">
+          Running it taught me more about abuse, rate limits, refunds and on-call than any job
+          description would have. It also bought the freedom to start <a href="https://kite.onl"
+            >Kite</a
+          > without asking anyone.
+        </p>
+        <p class="prose prose--note">↑ placeholder in your voice — rewrite with the real story.</p>
+      </article>
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      <div style="--item-tilt:1.4deg">
+        <Print
+          label="screenshot — Kite flow editor"
+          ratioLabel="4 : 3"
+          caption="the bit I'm proudest of"
+        />
+      </div>
+
+      <div style="--item-tilt:-1.2deg">
+        <NightCard
+          title="hiring me?"
+          body="I'm part-time employed and busy with my own things, but I always read a good problem description."
+          cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+        />
+      </div>
+    </section>
+
+    <section style="--col:1 / span 7;--tilt:.8deg">
+      <Receipt
+        title="WRITING FROM THIS DRAWER"
+        sub="merlinfuchs.com/posts · software & business"
+        rows={writing.map((post) => ({
+          label: post.data.title,
+          href: postHref(post),
+          meta: post.data.kind ?? post.data.category,
+        }))}
+        footLink={{ label: "the whole archive »", href: site.postsUrl }}
+      />
+    </section>
+
+    <section style="--col:8 / span 5;--tilt:-1.5deg">
+      <ListCard title="open source & odds and ends" rows={openSource} />
+    </section>
+
+    <PrevNext current="software" />
+  </div>
+
+  <SiteFooter phrase={drawer.footer} />
+</Layout>

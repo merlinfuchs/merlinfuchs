@@ -1,0 +1,16 @@
+---
+import { site } from "../data/site";
+
+interface Props {
+  /** Optional page-specific phrase, e.g. "shot, developed and scanned by hand". */
+  phrase?: string;
+  marginTop?: string;
+}
+
+const { phrase, marginTop = "58px" } = Astro.props;
+---
+
+<footer class="site-foot" style={`--foot-top:${marginTop}`}>
+  {phrase && <>{phrase} · </>}<span class="hand">{site.tagline}</span><br />
+  {site.copyright}
+</footer>

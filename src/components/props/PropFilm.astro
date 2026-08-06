@@ -1,0 +1,21 @@
+---
+/** A strip of negatives half-hidden behind the content column. */
+
+interface Props {
+  at: string;
+  width: string;
+  frameHeight: string;
+  tilt: string;
+  frames?: number;
+}
+
+const { at, width, frameHeight, tilt, frames = 4 } = Astro.props;
+---
+
+<div class="prop-film" style={`${at};width:${width};--tilt:${tilt}`}>
+  <div class="prop-film__perf"></div>
+  <div class="prop-film__frames">
+    {Array.from({ length: frames }, () => <div style={`height:${frameHeight}`} />)}
+  </div>
+  <div class="prop-film__perf"></div>
+</div>

@@ -1,0 +1,118 @@
+---
+import DrawerHead from "../components/DrawerHead.astro";
+import DrawerNav from "../components/DrawerNav.astro";
+import FilmStrip from "../components/FilmStrip.astro";
+import NightCard from "../components/NightCard.astro";
+import PrevNext from "../components/PrevNext.astro";
+import Print from "../components/Print.astro";
+import Receipt from "../components/Receipt.astro";
+import SectionHead from "../components/SectionHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Sticky from "../components/Sticky.astro";
+import PhotographyProps from "../components/props/PhotographyProps.astro";
+import Layout from "../layouts/Layout.astro";
+import { getDrawer } from "../data/drawers";
+import { developingLog, frames, inTheBag, roll } from "../data/photography";
+import { site } from "../data/site";
+
+const drawer = getDrawer("photography");
+---
+
+<Layout title="Photography — merlin's desk" description={drawer.blurb}>
+  <DrawerNav current="photography" />
+  <PhotographyProps />
+
+  <div class="grid">
+    <DrawerHead drawer={drawer} />
+
+    <!-- The latest roll, frame by frame -->
+    <section style="--col:1 / span 8;--tilt:.5deg">
+      <div class="contact-sheet">
+        <div class="contact-sheet__head">
+          <span>CONTACT SHEET — {roll.id}</span><span>{roll.stock}</span>
+        </div>
+
+        <div class="contact-sheet__grid">
+          {
+            frames.map((frame) => (
+              <div class="frame">
+                <div class="frame__img">{frame.label}</div>
+                <div class="frame__num">{frame.num}</div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="contact-sheet__foot">
+          <span>drop your scans onto any frame</span>
+          <a href={site.postsUrl}>every roll so far »</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" style="--col:9 / span 4;--tilt:-1.6deg">
+      <Sticky title="in the bag" items={inTheBag} foot="SWAP THIS FOR YOUR REAL KIT" />
+
+      <Receipt
+        class="receipt--compact"
+        title="DEVELOPING LOG"
+        rows={developingLog.map((entry) => ({ label: entry.roll, meta: entry.state }))}
+      />
+    </section>
+
+    <div style="--col:1 / -1">
+      <SectionHead title="prints on the wall" note="favourites, not bests" />
+    </div>
+
+    <section style="--col:1 / span 5;--tilt:-1.8deg">
+      <Print
+        label="large print — portrait"
+        ratio="4 / 5"
+        ratioLabel="4 : 5"
+        caption="the one that came out right"
+        padding="12px 12px 34px"
+      />
+    </section>
+
+    <section class="stack" style="--col:6 / span 7;--stack-gap:20px">
+      <div style="--item-tilt:1.4deg">
+        <Print
+          label="wide print — a street, evening"
+          ratio="3 / 2"
+          caption="pushed two stops, no regrets"
+          padding="10px 10px 28px"
+        />
+      </div>
+
+      <div style="--item-tilt:-1deg">
+        <FilmStrip frames={3} />
+      </div>
+    </section>
+
+    <section style="--col:1 / span 7;--tilt:.6deg">
+      <article class="card card--ruled">
+        <h2 class="essay__title">Why film, in 2026</h2>
+        <p class="prose">
+          Because a roll is thirty-six decisions and then it's over. Because the scanner takes an
+          evening and that evening is quiet. Because I already stare at a screen for work, and this
+          is the one hobby where the feedback loop is measured in days.
+        </p>
+        <p class="prose prose--note">
+          ↑ your words here — this is a placeholder in your voice, not a quote.
+        </p>
+      </article>
+    </section>
+
+    <section style="--col:8 / span 5;--tilt:-1.5deg">
+      <NightCard
+        title="want a print?"
+        body="Nothing is for sale, but if something here belongs on your wall, ask and I'll send a file."
+        cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+      />
+    </section>
+
+    <PrevNext current="photography" />
+  </div>
+
+  <SiteFooter phrase={drawer.footer} />
+</Layout>

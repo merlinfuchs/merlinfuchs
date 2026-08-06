@@ -1,0 +1,26 @@
+---
+import { drawerIndex, drawers, otherDrawers, type DrawerId } from "../data/drawers";
+
+interface Props {
+  current: DrawerId;
+}
+
+const { current } = Astro.props;
+const others = otherDrawers(current);
+const position = drawerIndex(current) + 1;
+---
+
+<div class="drawer-nav">
+  <a class="paper-btn tilt" style="--tilt:-1.4deg" href="/">← back to the desk</a>
+
+  <div class="drawer-nav__links">
+    <span>drawer {position} of {drawers.length}</span>
+    {
+      others.map((drawer) => (
+        <a class="chip" style={`--chip-bg:${drawer.color}`} href={drawer.href}>
+          {drawer.id}
+        </a>
+      ))
+    }
+  </div>
+</div>

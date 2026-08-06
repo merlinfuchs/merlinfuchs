@@ -1,0 +1,62 @@
+---
+/**
+ * Objects lying on the desk around the home page. Positions are relative to
+ * the prop layer, which bleeds 300px past the content column on each side —
+ * most of every object stays hidden behind the opaque cards.
+ */
+import PropFilm from "./PropFilm.astro";
+import PropPhoto from "./PropPhoto.astro";
+import PropSlip from "./PropSlip.astro";
+---
+
+<div class="props" aria-hidden="true">
+  <PropPhoto
+    label="photo — the workshop"
+    at="left:184px;top:250px"
+    width="196px"
+    height="150px"
+    tilt="-7deg"
+  />
+
+  <PropPhoto
+    label="photo — a ride"
+    at="right:170px;top:215px"
+    width="210px"
+    height="140px"
+    padding="8px 8px 26px"
+    tilt="6deg"
+  />
+
+  <PropFilm at="left:-40px;top:660px" width="420px" frameHeight="78px" tilt="4deg" />
+
+  <PropSlip
+    head="ADMIT ONE"
+    meta="№ 0426"
+    note="some conference, some city"
+    at="right:130px;top:790px"
+    width="250px"
+    tilt="-5deg"
+  />
+
+  <!-- A letter, half out of its envelope. -->
+  <div class="prop-paper" style="left:144px;top:1105px;width:236px;--tilt:3deg">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div class="prop-lines" style="flex:1">
+        <div></div>
+        <div></div>
+        <div style="width:75%"></div>
+        <div></div>
+      </div>
+      <div class="prop-stamp"></div>
+    </div>
+  </div>
+
+  <PropPhoto
+    label="photo — a failed print"
+    at="right:160px;top:1290px"
+    width="220px"
+    height="132px"
+    padding="8px 8px 24px"
+    tilt="-8deg"
+  />
+</div>

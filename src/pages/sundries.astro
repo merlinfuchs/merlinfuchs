@@ -1,0 +1,294 @@
+---
+import DrawerHead from "../components/DrawerHead.astro";
+import DrawerNav from "../components/DrawerNav.astro";
+import NightCard from "../components/NightCard.astro";
+import PrevNext from "../components/PrevNext.astro";
+import BikeDrawing from "../components/BikeDrawing.astro";
+import Receipt from "../components/Receipt.astro";
+import SectionHead from "../components/SectionHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Sticky from "../components/Sticky.astro";
+import SundriesProps from "../components/props/SundriesProps.astro";
+import Layout from "../layouts/Layout.astro";
+import { getDrawer } from "../data/drawers";
+import { getPosts, postHref } from "../data/posts";
+import {
+  dueDates,
+  frameBag,
+  loose,
+  mate,
+  meaningToStart,
+  peakBottles,
+  readingNow,
+  rest,
+  rides,
+  shelf,
+  totalKm,
+} from "../data/sundries";
+import { site } from "../data/site";
+
+const drawer = getDrawer("sundries");
+
+/** The three small ones share a row. */
+const restLayout = [
+  { col: "1 / span 4", tilt: "-1.2deg" },
+  { col: "5 / span 4", tilt: "1.4deg" },
+  { col: "9 / span 4", tilt: "-.9deg" },
+];
+
+const posts = await getPosts();
+const written = posts.filter((post) => post.data.category === "sundries");
+---
+
+<Layout title="Sundries — merlin's desk" description={drawer.blurb}>
+  <DrawerNav current="sundries" />
+  <SundriesProps />
+
+  <div class="grid">
+    <DrawerHead drawer={drawer} />
+
+    <!-- Cycling: the one in here with actual data -->
+    <div style="--col:1 / -1">
+      <SectionHead title="on wheels" note="the hobby with no version control" />
+    </div>
+
+    <section style="--col:1 / span 7;--tilt:.5deg">
+      <div class="ride-log">
+        <div class="ride-log__head">
+          <span>RIDE LOG — 2026</span><span>KEPT BY HAND, BADLY</span>
+        </div>
+
+        <div class="ride-log__cols">
+          <div>DATE</div>
+          <div>ROUTE</div>
+          <div>DIST</div>
+          <div>MOOD</div>
+        </div>
+
+        {
+          rides.map((ride) => (
+            <div class="ride-log__row">
+              <div class="ride-log__date">{ride.date}</div>
+              <div>{ride.route}</div>
+              <div class="ride-log__dist">{ride.dist}</div>
+              <div class="ride-log__mood">{ride.mood}</div>
+            </div>
+          ))
+        }
+
+        <div class="ride-log__foot">
+          <span>six most recent · {totalKm} km logged</span>
+          <span class="hand">the rest lives in my head</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      <div style="--item-tilt:-1.6deg">
+        <BikeDrawing />
+      </div>
+
+      <div style="--item-tilt:1.4deg">
+        <Sticky title="always in the frame bag" items={frameBag} foot="SWAP FOR YOUR REAL KIT" />
+      </div>
+    </section>
+
+    <!-- Club Mate -->
+    <div style="--col:1 / -1">
+      <SectionHead title="club mate" note="officially a soft drink" />
+    </div>
+
+    <section style="--col:1 / span 7;--tilt:-.5deg">
+      <article class="card card--ruled">
+        <div class="mate-card">
+          <div class="mate" aria-hidden="true">
+            <div class="mate__cap"></div>
+            <div class="mate__neck"></div>
+            <div class="mate__shoulder"></div>
+            <div class="mate__body">
+              <div class="mate__label">
+                <b>CLUB MATE</b>
+                <span>0,5 L</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p>
+              Cold tea with sugar and caffeine, sold in a brown bottle, and the only drink I have
+              ever had to explain to my family. It tastes wrong for about a week and then it does
+              not taste wrong ever again.
+            </p>
+            <p>
+              It is not a productivity system. It is a bottle that sits next to the keyboard and
+              gets warm while I am arguing with a rate limiter.
+            </p>
+
+            <div class="sticky__list" style="font-size:12px">
+              {mate.notes.map((note) => <div>{note}</div>)}
+            </div>
+
+            <div class="mate-stats">
+              {
+                mate.stats.map((stat) => (
+                  <div>
+                    {stat.label}
+                    <span>{stat.value}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      <div class="tally" style="--item-tilt:1.3deg">
+        <div class="tally__head">
+          <span>BOTTLES, BY MONTH</span><span>PEAK {peakBottles}</span>
+        </div>
+        <div class="tally__bars">
+          {
+            mate.months.map((month) => (
+              <div
+                style={`height:${Math.round((month.bottles / peakBottles) * 100)}%`}
+                data-peak={month.bottles === peakBottles ? "" : undefined}
+              />
+            ))
+          }
+        </div>
+        <div class="tally__months">
+          {mate.months.map((month) => <span>{month.month}</span>)}
+        </div>
+      </div>
+
+      <div style="--item-tilt:-1.1deg">
+        <Receipt
+          class="receipt--compact"
+          title="SPÄTI, 23:40"
+          sub="the one that is always open"
+          rows={mate.receipt.map((line) => ({ label: line.item, meta: line.meta }))}
+        />
+      </div>
+    </section>
+
+    <!-- Reading -->
+    <div style="--col:1 / -1">
+      <SectionHead title="reading" note="two at a time, badly" />
+    </div>
+
+    <section style="--col:1 / span 7;--tilt:.4deg">
+      <article class="card shelf-card">
+        <div class="card-meta"><span>THE SHELF</span><span>SWAP FOR YOUR REAL ONE</span></div>
+        <div class="shelf">
+          <div class="shelf__books">
+            {
+              shelf.map((book) => (
+                <div
+                  class="book"
+                  style={`--w:${book.width}px;--h:${book.height}px;--bg:${book.color};--fg:${book.ink}${
+                    book.tilt ? `;--book-tilt:${book.tilt}deg` : ""
+                  }`}
+                >
+                  {book.title}
+                </div>
+              ))
+            }
+          </div>
+          <div class="shelf__board"></div>
+        </div>
+        <div class="shelf__caption">the ones that made it out of the box</div>
+      </article>
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      <div class="reading-now" style="--item-tilt:-1.4deg">
+        <div class="reading-now__mark"></div>
+        <div class="card-meta">
+          <span>CURRENTLY READING</span><span>{readingNow.since}</span>
+        </div>
+        <div class="reading-now__title">{readingNow.title}</div>
+        <div class="reading-now__author">{readingNow.author}</div>
+        <div class="reading-now__foot">
+          <span>{readingNow.progress}</span>
+          <span class="hand">{readingNow.note}</span>
+        </div>
+      </div>
+
+      <div class="library-card" style="--item-tilt:1.2deg">
+        <div class="card-meta"><span>DATE DUE</span><span>№ 6</span></div>
+        <div class="library-card__dates">
+          {dueDates.map((date) => <span>{date}</span>)}
+        </div>
+        <div class="library-card__foot">returned late, mostly</div>
+      </div>
+    </section>
+
+    <!-- Everything else, one card each -->
+    <div style="--col:1 / -1">
+      <SectionHead title="and the rest" note="one card each, no more" />
+    </div>
+
+    {
+      rest.map((sundry, i) => (
+        <section class="stretch" style={`--col:${restLayout[i].col};--tilt:${restLayout[i].tilt}`}>
+          <article class="card card--tab mini-card sundry">
+            <div class="rule-card__label">{sundry.label}</div>
+            <div class="mini-card__title">{sundry.title}</div>
+            <p>{sundry.body}</p>
+            <div class="sundry__foot"><span>{sundry.note}</span></div>
+          </article>
+        </section>
+      ))
+    }
+
+    <section class="loose" style="--col:1 / -1;--tilt:.4deg">
+      <div class="loose__head">
+        <div class="hand">loose in the drawer</div>
+        <span>nothing worth a card</span>
+      </div>
+      <div class="loose__tags">
+        {loose.map((thing) => <span>{thing}</span>)}
+      </div>
+    </section>
+
+    <section style="--col:1 / span 7;--tilt:.7deg">
+      <Receipt
+        title="THINGS I KEEP MEANING TO START"
+        sub="the drawer has room"
+        rows={meaningToStart.map((entry) => ({ label: entry.item, meta: entry.state }))}
+      />
+    </section>
+
+    <section class="stack" style="--col:8 / span 5">
+      {
+        written.length > 0 && (
+          <div class="list-card" style="--item-tilt:1.2deg">
+            <div class="list-card__title">written from this drawer</div>
+            <div class="list-card__rows">
+              {written.map((post) => (
+                <div class="list-card__row">
+                  <a href={postHref(post)}>{post.data.title}</a>
+                  <span>{post.data.kind ?? "post"}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <div style="--item-tilt:-1.5deg">
+        <NightCard
+          title="got a recommendation?"
+          body="A record, a route, a book or a bakery — I will take all four. This drawer fills itself from other people."
+          cta={{ label: site.emailLabel, href: `mailto:${site.email}` }}
+        />
+      </div>
+    </section>
+
+    <PrevNext current="sundries" />
+  </div>
+
+  <SiteFooter phrase={drawer.footer} />
+</Layout>

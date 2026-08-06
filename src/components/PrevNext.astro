@@ -1,0 +1,33 @@
+---
+import { drawerIndex, neighbours, type DrawerId } from "../data/drawers";
+
+interface Props {
+  current: DrawerId;
+}
+
+const { current } = Astro.props;
+const { prev, next } = neighbours(current);
+
+/* The last drawer wraps back round to the first — label it honestly. */
+const nextLabel = drawerIndex(next.id) === 0 ? "BACK TO THE FIRST →" : "NEXT DRAWER →";
+---
+
+<nav class="prev-next" style="--col:1 / -1" aria-label="Other drawers">
+  <a
+    class="prev-next__card"
+    style={`--card-bg:${prev.color};--label-fg:${prev.label};--tilt:-1deg`}
+    href={prev.href}
+  >
+    <div class="prev-next__label">← PREVIOUS DRAWER</div>
+    <div class="prev-next__name">{prev.name}</div>
+  </a>
+
+  <a
+    class="prev-next__card"
+    style={`--card-bg:${next.color};--label-fg:${next.label};--tilt:1.2deg;text-align:right`}
+    href={next.href}
+  >
+    <div class="prev-next__label">{nextLabel}</div>
+    <div class="prev-next__name">{next.name}</div>
+  </a>
+</nav>

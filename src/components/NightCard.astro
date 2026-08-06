@@ -1,0 +1,18 @@
+---
+/** Dark call-to-action card with a yellow button pinned to the bottom. */
+
+interface Props {
+  title: string;
+  body: string;
+  cta: { label: string; href: string };
+  class?: string;
+}
+
+const { title, body, cta, class: className } = Astro.props;
+---
+
+<div class:list={["night-card", className]}>
+  <div class="night-card__title">{title}</div>
+  <p>{body}</p>
+  <a class="night-card__cta" href={cta.href}>{cta.label}</a>
+</div>

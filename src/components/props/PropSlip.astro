@@ -1,0 +1,20 @@
+---
+/** A warm paper slip — ticket, invoice, developing note. */
+
+interface Props {
+  head: string;
+  meta?: string;
+  /** Handwritten line under the dashed rule. */
+  note?: string;
+  at: string;
+  width: string;
+  tilt: string;
+}
+
+const { head, meta, note, at, width, tilt } = Astro.props;
+---
+
+<div class="prop-slip" style={`${at};width:${width};--tilt:${tilt}`}>
+  <div class="prop-slip__head">{head}{meta && <span>{meta}</span>}</div>
+  {note ? <span class="hand">{note}</span> : <slot />}
+</div>

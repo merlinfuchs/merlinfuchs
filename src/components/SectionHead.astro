@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  /** Small grey aside at the far right of the rule. */
+  note?: string;
+  /** Vertical rhythm override — the home page sits tighter. */
+  margin?: string;
+}
+
+const { title, note, margin } = Astro.props;
+---
+
+<div class="section-head" style={margin && `margin:${margin}`}>
+  <div class="section-head__title">{title}</div>
+  <div class="section-head__rule"></div>
+  {note && <span class="section-head__note">{note}</span>}
+</div>

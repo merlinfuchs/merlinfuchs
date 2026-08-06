@@ -1,0 +1,37 @@
+---
+import PropFilm from "./PropFilm.astro";
+import PropPhoto from "./PropPhoto.astro";
+import PropSlip from "./PropSlip.astro";
+---
+
+<div class="props" aria-hidden="true">
+  <PropPhoto
+    label="photo — a spare frame"
+    at="left:194px;top:345px"
+    width="186px"
+    height="142px"
+    padding="9px 9px 28px"
+    tilt="-6deg"
+  />
+
+  <PropFilm at="right:-20px;top:545px" width="400px" frameHeight="74px" tilt="-5deg" />
+
+  <PropSlip
+    head="DEV TIMES · C-41"
+    meta="38°C"
+    note="3:15 dev, 6:00 blix"
+    at="left:136px;top:915px"
+    width="244px"
+    tilt="4deg"
+  />
+
+  <div class="prop-sleeve" style="right:150px;top:1190px;width:230px;--tilt:-3deg">
+    <div class="prop-sleeve__grid">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="prop-map__label">NEGATIVE SLEEVE — ROLL 039</div>
+  </div>
+</div>

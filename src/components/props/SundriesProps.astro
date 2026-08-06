@@ -1,0 +1,45 @@
+---
+/**
+ * Assorted objects for drawer four — deliberately unrelated to each other,
+ * which is the point of the drawer.
+ */
+import PropSlip from "./PropSlip.astro";
+---
+
+<div class="props" aria-hidden="true">
+  <div class="prop-map" style="left:130px;top:355px;width:250px;--tilt:-4deg">
+    <div class="prop-map__grid">
+      <div class="prop-map__route"></div>
+    </div>
+    <div class="prop-map__label">MAP SHEET 14 · SOUTH LOOP</div>
+  </div>
+
+  <!-- A record sleeve, corner out. -->
+  <div
+    class="prop-paper"
+    style="right:110px;top:560px;width:250px;height:250px;padding:18px;--prop-bg:#efe9dc;--tilt:5deg"
+  >
+    <div
+      style="height:100%;border:1px solid #d5cbb0;display:flex;align-items:center;justify-content:center"
+    >
+      <div class="prop-ring" style="position:static;width:96px;height:96px"></div>
+    </div>
+  </div>
+
+  <div class="prop-bib" style="left:190px;top:990px;width:190px;--tilt:4deg">
+    <div class="prop-bib__label">RIDER</div>
+    <div class="prop-bib__number">247</div>
+    <div class="prop-bib__label" style="letter-spacing:.14em">SPRING GRAVEL</div>
+  </div>
+
+  <PropSlip
+    head="ADMIT ONE"
+    meta="№ 0426"
+    note="kept, for no reason"
+    at="right:150px;top:1215px"
+    width="240px"
+    tilt="-3deg"
+  />
+
+  <div class="prop-ring" style="left:210px;top:1330px;width:130px;height:130px;--tilt:0deg"></div>
+</div>

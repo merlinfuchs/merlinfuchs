@@ -1,0 +1,41 @@
+---
+import PropSlip from "./PropSlip.astro";
+---
+
+<div class="props" aria-hidden="true">
+  <PropSlip head="INVOICE № 2026-118" meta="PAID" at="left:186px;top:350px" width="250px" tilt="-5deg">
+    <div class="prop-lines" style="padding-top:9px">
+      <div></div>
+      <div></div>
+      <div style="width:62%"></div>
+    </div>
+  </PropSlip>
+
+  <!-- An unfocused terminal — grey traffic lights on purpose. -->
+  <div class="prop-terminal" style="right:96px;top:560px;width:300px;--tilt:4deg">
+    <div class="prop-terminal__dots">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="prop-terminal__lines">
+      <div style="width:80%"></div>
+      <div style="width:55%"></div>
+      <div style="width:68%;background:#3d4a5e"></div>
+      <div style="width:40%"></div>
+    </div>
+  </div>
+
+  <div class="prop-sticky" style="left:170px;top:960px;width:210px;height:132px;--tilt:3deg">
+    <div class="hand">ship it friday?<br />no. monday.</div>
+  </div>
+
+  <div
+    class="prop-paper"
+    style="right:156px;top:1210px;width:224px;padding:14px 16px;--prop-bg:var(--paper);--tilt:-3deg"
+  >
+    <div class="prop-paper__label">MERLIN FUCHS · SOFTWARE</div>
+    <div style="height:1px;background:#ddd3b8;margin:9px 0"></div>
+    <div class="prop-paper__label">hi [at] merlinfuchs.com</div>
+  </div>
+</div>

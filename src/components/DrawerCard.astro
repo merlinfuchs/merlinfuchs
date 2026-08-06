@@ -1,0 +1,26 @@
+---
+import type { Drawer } from "../data/drawers";
+
+interface Props {
+  drawer: Drawer;
+  col: string;
+  tilt: string;
+}
+
+const { drawer, col, tilt } = Astro.props;
+---
+
+<a
+  class="drawer-card"
+  href={drawer.href}
+  style={`--col:${col};--tilt:${tilt};--card-bg:${drawer.color}`}
+>
+  <div class="drawer-card__tab"></div>
+  <div class="drawer-card__body">
+    <div class="drawer-card__title">{drawer.name}</div>
+    <p>{drawer.blurb}</p>
+    <div class="drawer-card__foot">
+      <span>{drawer.newest}</span><b>OPEN →</b>
+    </div>
+  </div>
+</a>
