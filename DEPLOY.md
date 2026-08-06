@@ -154,6 +154,10 @@ not resolving yet or port 80 blocked.
 ```bash
 curl -sI https://merlinfuchs.com | head -3
 curl -sI https://preview.merlinfuchs.com | grep -i x-robots-tag
+
+# Caddy runs as its own `caddy` user, not root. If it can't read the release it
+# answers 403, which looks like a config problem but isn't.
+sudo -u caddy cat /srv/merlinfuchs/current-live/index.html >/dev/null && echo "readable"
 ```
 
 Then let the preview timer prove itself: push any branch, wait 30s, and load

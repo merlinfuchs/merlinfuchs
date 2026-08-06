@@ -37,6 +37,11 @@ stamp="$SITE_ROOT/.deployed-$target"
 
 log() { printf '[%s %s] %s\n' "$(date -u +%H:%M:%S)" "$target" "$*"; }
 
+# Caddy runs as its own unprivileged `caddy` user, so everything under the
+# release directory has to be world-readable or it serves 403s. Don't leave that
+# to whatever umask the container happens to inherit.
+umask 022
+
 mkdir -p "$SITE_ROOT/checkouts" "$releases" "$SITE_ROOT/.npm/$target"
 
 # Per-target lock, so live and preview never wait on each other — they touch

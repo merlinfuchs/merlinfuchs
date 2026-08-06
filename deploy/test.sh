@@ -121,6 +121,13 @@ mv -Tf "$SITE_ROOT/current-preview.tmp" "$SITE_ROOT/current-preview"
 [ "$(cat "$SITE_ROOT/current-preview/index.html")" = b ] || fail "rollback served the wrong release"
 pass "rollback is a symlink swap"
 
+# Caddy reads these as a different unprivileged user, and answers 403 rather
+# than anything informative if it can't.
+release=$(readlink "$SITE_ROOT/current-live")
+[ "$(stat -c %a "$release")" = 755 ] || fail "release dir is $(stat -c %a "$release"), not world-readable"
+[ "$(stat -c %a "$release/index.html")" = 644 ] || fail "page is $(stat -c %a "$release/index.html")"
+pass "releases are readable by the user serving them"
+
 # ------------------------------------------------------------------ sync.sh --
 
 export SITE_ROOT=/work/site2 REPO_URL=/work/repo2
