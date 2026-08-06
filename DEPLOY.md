@@ -155,6 +155,10 @@ not resolving yet or port 80 blocked.
 curl -sI https://merlinfuchs.com | head -3
 curl -sI https://preview.merlinfuchs.com | grep -i x-robots-tag
 
+# www is a 301 to the apex, path and query intact
+curl -s -o /dev/null -w "%{http_code} -> %{redirect_url}\n" \
+  https://www.merlinfuchs.com/posts/ai-in-a-box
+
 # Caddy runs as its own `caddy` user, not root. If it can't read the release it
 # answers 403, which looks like a config problem but isn't.
 sudo -u caddy cat /srv/merlinfuchs/current-live/index.html >/dev/null && echo "readable"

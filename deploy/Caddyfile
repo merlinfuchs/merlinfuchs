@@ -6,7 +6,14 @@
 #   sudo caddy validate --config /etc/caddy/Caddyfile
 #   sudo systemctl reload caddy
 
-merlinfuchs.com, www.merlinfuchs.com {
+# One canonical hostname. Serving the site on both would put a duplicate copy of
+# it on www, which is the same problem `noindex` solves for preview.
+# {uri} carries the path and query string through, so deep links survive.
+www.merlinfuchs.com {
+	redir https://merlinfuchs.com{uri} permanent
+}
+
+merlinfuchs.com {
 	root * /srv/merlinfuchs/current-live
 	encode zstd gzip
 	file_server
