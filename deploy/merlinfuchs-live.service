@@ -1,0 +1,36 @@
+[Unit]
+Description=Build merlinfuchs.com from the main branch
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+TimeoutStartSec=600
+
+# The build toolchain lives in the image, so the host needs only Docker.
+#
+# SITE_ROOT is mounted at the same absolute path inside the container on
+# purpose: `current-live` is an absolute symlink, and it has to resolve for
+# whatever serves it on the host too.
+#
+# --user must match whoever owns /srv/merlinfuchs, or releases come out
+# root-owned. No --name: an overlapping tick would collide on it, and the
+# per-target lockfile already turns that into a clean no-op.
+ExecStart=/usr/bin/docker run --rm \
+    --user 1001:1001 \
+    --env-file /etc/merlinfuchs.env \
+    --env HOME=/srv/merlinfuchs \
+    --volume /srv/merlinfuchs:/srv/merlinfuchs \
+    merlinfuchs-deploy:latest live
+
+# ProtectSystem=full rather than strict: strict makes /run read-only, which
+# stops the client reaching the Docker socket. The isolation that matters here
+# is the container's, not this unit's.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

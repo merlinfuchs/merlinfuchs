@@ -1,0 +1,26 @@
+[Unit]
+Description=Build preview.merlinfuchs.com from the branch under review
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+TimeoutStartSec=600
+
+# Same image and same volume as the live unit, different argument. See
+# merlinfuchs-live.service for why the mount path and --user matter.
+ExecStart=/usr/bin/docker run --rm \
+    --user 1001:1001 \
+    --env-file /etc/merlinfuchs.env \
+    --env HOME=/srv/merlinfuchs \
+    --volume /srv/merlinfuchs:/srv/merlinfuchs \
+    merlinfuchs-deploy:latest preview
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

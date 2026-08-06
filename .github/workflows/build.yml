@@ -1,0 +1,41 @@
+name: build
+
+# The green check on a PR is the signal you see on your phone, and the thing
+# Claude's auto-fix reacts to when a change breaks the site.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Catches a link to a page that no longer exists — the failure mode this
+      # site is most prone to, since drawers and posts move around.
+      - name: Check internal links resolve
+        run: |
+          missing=0
+          while read -r path; do
+            [ "$path" = "/" ] && file="dist/index.html" || file="dist${path%/}/index.html"
+            if [ ! -f "$file" ] && [ ! -f "dist$path" ]; then
+              echo "broken internal link: $path"
+              missing=1
+            fi
+          done < <(grep -rho 'href="/[^"#?]*"' dist | sed 's/href="//;s/"//' | sort -u)
+          exit $missing

@@ -1,0 +1,12 @@
+[Unit]
+Description=Check for new commits on main every two minutes
+
+[Timer]
+OnBootSec=45s
+# main only moves when you merge, so it doesn't need watching closely.
+OnUnitActiveSec=120s
+AccuracySec=10s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

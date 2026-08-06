@@ -1,0 +1,12 @@
+[Unit]
+Description=Check for a new branch to preview every thirty seconds
+
+[Timer]
+OnBootSec=30s
+# This is the one you sit and wait for, so poll it more often than live.
+OnUnitActiveSec=30s
+AccuracySec=5s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

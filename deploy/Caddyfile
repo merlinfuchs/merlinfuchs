@@ -1,0 +1,65 @@
+# Caddy serves two static roots through symlinks the deploy script swaps.
+# Caddy gets certificates from Let's Encrypt automatically; nothing to configure
+# beyond pointing both names at this host.
+#
+#   sudo install -m 0644 Caddyfile /etc/caddy/Caddyfile
+#   sudo caddy validate --config /etc/caddy/Caddyfile
+#   sudo systemctl reload caddy
+
+merlinfuchs.com, www.merlinfuchs.com {
+	root * /srv/merlinfuchs/current-live
+	encode zstd gzip
+	file_server
+
+	# Astro fingerprints everything under /_astro, so it can be cached forever.
+	@immutable path /_astro/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	# Pages must revalidate or a deploy takes an hour to show up.
+	header Cache-Control "public, max-age=0, must-revalidate"
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	handle_errors {
+		respond "{err.status_code} {err.status_text}" {err.status_code}
+	}
+}
+
+preview.merlinfuchs.com {
+	root * /srv/merlinfuchs/current-preview
+	encode zstd gzip
+	file_server
+
+	# Deliberately not password-gated: it serves the same public site one branch
+	# ahead, from a public repo, with no secrets in the output — and the
+	# subdomain shows up in certificate transparency logs anyway, so a password
+	# would buy friction rather than privacy.
+	#
+	# noindex is the part that matters. It stops a duplicate copy of the site
+	# ranking on this subdomain. Crawling is allowed on purpose: a robots.txt
+	# Disallow would stop the crawl without stopping indexing of linked URLs,
+	# which is the opposite of what's wanted — the crawler has to fetch the page
+	# to see this header.
+	header {
+		X-Robots-Tag "noindex, nofollow, noarchive"
+		Cache-Control "no-store"
+		-Server
+	}
+}
+
+# When the editor service exists, this is all it takes to put it on the main
+# domain — the URL is Caddy's decision, not the codebase's:
+#
+# merlinfuchs.com {
+# 	handle /editor* {
+# 		reverse_proxy localhost:4000
+# 	}
+# 	handle {
+# 		root * /srv/merlinfuchs/current-live
+# 		file_server
+# 	}
+# }
