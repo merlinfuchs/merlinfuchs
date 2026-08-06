@@ -8,10 +8,13 @@ Requires=docker.service
 Type=oneshot
 TimeoutStartSec=600
 
+Environment=DEPLOY_UID=1001
+EnvironmentFile=-/etc/merlinfuchs.env
+
 # Same image and same volume as the live unit, different argument. See
 # merlinfuchs-live.service for why the mount path and --user matter.
 ExecStart=/usr/bin/docker run --rm \
-    --user 1001:1001 \
+    --user ${DEPLOY_UID}:${DEPLOY_UID} \
     --env-file /etc/merlinfuchs.env \
     --env HOME=/srv/merlinfuchs \
     --volume /srv/merlinfuchs:/srv/merlinfuchs \

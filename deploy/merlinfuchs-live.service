@@ -8,6 +8,10 @@ Requires=docker.service
 Type=oneshot
 TimeoutStartSec=600
 
+# Default, overridden by the env file if the deploy user's uid isn't 1001.
+Environment=DEPLOY_UID=1001
+EnvironmentFile=-/etc/merlinfuchs.env
+
 # The build toolchain lives in the image, so the host needs only Docker.
 #
 # SITE_ROOT is mounted at the same absolute path inside the container on
@@ -17,8 +21,11 @@ TimeoutStartSec=600
 # --user must match whoever owns /srv/merlinfuchs, or releases come out
 # root-owned. No --name: an overlapping tick would collide on it, and the
 # per-target lockfile already turns that into a clean no-op.
+#
+# This unit runs as root and shells out to docker; the container is what drops
+# to an unprivileged uid. No docker group membership needed anywhere.
 ExecStart=/usr/bin/docker run --rm \
-    --user 1001:1001 \
+    --user ${DEPLOY_UID}:${DEPLOY_UID} \
     --env-file /etc/merlinfuchs.env \
     --env HOME=/srv/merlinfuchs \
     --volume /srv/merlinfuchs:/srv/merlinfuchs \

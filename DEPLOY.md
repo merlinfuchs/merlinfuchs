@@ -42,39 +42,139 @@ and a systemd timer. Node, npm and its caches stay inside the image.
 > you review it and run `make -C deploy image` — which is what keeps deploy code
 > out of reach of anything that edits the site.
 
-## One-time setup
+## Setting up a fresh Ubuntu server
 
-Assumes Debian/Ubuntu with Docker and Caddy installed.
+Assumes DNS for `merlinfuchs.com`, `www` and `preview` already points at the box,
+and ports 80/443 are reachable. The repo is public, so nothing here needs a
+deploy key or a token.
+
+### 1. Packages
 
 ```bash
-# 1. A user that owns the site directory and nothing else. Note its uid —
-#    it goes in the service unit's --user flag.
-sudo useradd --system --create-home --home-dir /srv/merlinfuchs --shell /usr/sbin/nologin deploy
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y docker.io git make
+
+# Caddy, from its own apt repo — the version in universe lags
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
+  | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
+  | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update && sudo apt install -y caddy
+```
+
+If `ufw` is on, Caddy needs both ports — 80 is used for the certificate
+challenge, not just redirects:
+
+```bash
+sudo ufw allow 80,443/tcp
+```
+
+### 2. A user to own the files
+
+It runs nothing. The systemd units run as root and shell out to `docker`; the
+container drops to this uid so releases aren't root-owned. No docker group
+membership for anyone.
+
+```bash
+sudo useradd --system --home-dir /srv/merlinfuchs --shell /usr/sbin/nologin deploy
 sudo mkdir -p /srv/merlinfuchs
-sudo chown -R deploy:deploy /srv/merlinfuchs
-id -u deploy
+sudo chown deploy:deploy /srv/merlinfuchs
+id -u deploy          # note this
+```
 
-# 2. Config — edit before installing
-sudo install -m 0640 -o deploy -g deploy deploy/config.example.env /etc/merlinfuchs.env
-sudo -e /etc/merlinfuchs.env
+### 3. Source, for building the image and installing config
 
-# 3. Build the image (runs the test suite first)
-make -C deploy image
+Separate from `/srv/merlinfuchs`, which the deploy owns and manages.
 
-# 4. Timers — set --user in both units to the uid from step 1 if it isn't 1001
+```bash
+sudo git clone https://github.com/merlinfuchs/merlinfuchs.git /opt/merlinfuchs-src
+cd /opt/merlinfuchs-src && sudo git checkout desk
+```
+
+### 4. Config
+
+```bash
+sudo install -m 0644 deploy/config.example.env /etc/merlinfuchs.env
+sudoedit /etc/merlinfuchs.env     # set DEPLOY_UID if step 2 wasn't 1001
+```
+
+`/etc/merlinfuchs.env` is world-readable on purpose — systemd reads it for
+`DEPLOY_UID`, and it holds no secrets. If you ever add `GH_TOKEN`, chmod it 0640
+and give it to root.
+
+### 5. Build the image
+
+Runs the test suite first, then builds. Takes a couple of minutes on a small box,
+mostly pulling `node:22-bookworm-slim`.
+
+```bash
+sudo make -C deploy image
+```
+
+### 6. Timers
+
+```bash
 sudo install -m 0644 deploy/merlinfuchs-{live,preview}.{service,timer} /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now merlinfuchs-live.timer merlinfuchs-preview.timer
+```
 
-# 5. Caddy
+### 7. First build, before pointing Caddy at it
+
+The first run clones and installs dependencies, so give it a minute. Watch it
+rather than guessing:
+
+```bash
+sudo systemctl start merlinfuchs-live.service
+journalctl -u merlinfuchs-live.service -f
+```
+
+Then confirm there's something to serve:
+
+```bash
+ls -l /srv/merlinfuchs/current-live
+cat /srv/merlinfuchs/current-live/index.html | head -5
+```
+
+### 8. Caddy
+
+```bash
 sudo install -m 0644 deploy/Caddyfile /etc/caddy/Caddyfile
 sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl reload caddy
+journalctl -u caddy -f      # watch the certificates get issued
 ```
 
-To run without Docker instead, install Node 22+ and git on the host, run
-`make -C deploy install`, and swap the `ExecStart` block in the service unit for
-the commented-out one. The scripts are identical either way.
+Certificates are automatic on first request. If it fails, it's almost always DNS
+not resolving yet or port 80 blocked.
+
+### 9. Check it
+
+```bash
+curl -sI https://merlinfuchs.com | head -3
+curl -sI https://preview.merlinfuchs.com | grep -i x-robots-tag
+```
+
+Then let the preview timer prove itself: push any branch, wait 30s, and load
+`preview.merlinfuchs.com`.
+
+### Updating the deploy tooling later
+
+The scripts run from the image, so a change to them needs a deliberate rebuild:
+
+```bash
+cd /opt/merlinfuchs-src && sudo git pull
+sudo make -C deploy image      # runs the tests
+sudo install -m 0644 deploy/merlinfuchs-*.{service,timer} /etc/systemd/system/
+sudo systemctl daemon-reload
+```
+
+### Without Docker
+
+Install Node 22+ and git on the host, run `make -C deploy install`, and swap the
+`ExecStart` block in each unit for the commented-out one. The scripts are
+identical either way.
 
 ## Sharing the box with other projects
 
